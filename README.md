@@ -55,6 +55,9 @@ L'icône Acrosport apparaît comme une vraie appli, en plein écran.
   - **Voir les observations** : tableau *qui a observé qui*, date, critères réussis, nombre d'erreurs de sécurité, détail complet avec **Voir**.
 - La Google Sheet contient deux onglets : **Groupes** et **Observations** (qui a observé qui, quand, résultat, erreurs de sécurité nommées). Les mots de passe n'y sont jamais en clair.
 - Seuls les prénoms des élèves sont enregistrés, dans ton propre Google Drive.
-- Les classes proposées à l'accueil (TMELEC, TTBMA) se changent dans ⚙ → **Classes**.
+- **Classes et listes d'élèves** : ⚙ → **Listes d'élèves** → nom de la classe (ex. `1GT`), code de classe facultatif, fichier CSV (export Pronote « NOM Prénom;Classe ») → **Envoyer la liste en ligne**. Le nom en MAJUSCULES est séparé du prénom ; la liste va dans l'onglet **Eleves** de ta Google Sheet (jamais dans le site public). La classe apparaît alors sur l'accueil et, à la création d'un groupe, les élèves touchent leurs noms au lieu de les taper.
+- **Code de classe** : si tu en mets un, les élèves le tapent une fois par tablette pour voir les noms et les groupes de leur classe (l'onglet **Classes** de la Sheet le contient ; tu peux le changer là).
+
+**Après chaque mise à jour de `Code.gs`** : copie le nouveau fichier dans Apps Script puis **Déployer → Gérer les déploiements → ✏️ → Version : Nouvelle version** (l'URL ne change pas).
 
 Si tu modifies `Code.gs` plus tard : **Déployer → Gérer les déploiements → ✏️ → Version : Nouvelle version** (l'URL ne change pas).

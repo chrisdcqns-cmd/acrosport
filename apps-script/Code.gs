@@ -11,11 +11,14 @@
  *
  * Les mots de passe ne sont jamais enregistrés en clair : seule une empreinte (SHA-256 + sel) est gardée.
  * Onglet « Groupes » : un groupe par ligne. Onglet « Observations » : qui a observé qui, quand, avec quel résultat.
+ * Onglet « Eleves » : listes d'élèves importées depuis l'appli (Espace enseignant). Onglet « Classes » : code de classe facultatif.
  */
 const MOT_DE_PASSE_PROF = 'change-moi';
 const TAILLE_MORCEAU = 45000; // une cellule Google Sheets accepte 50 000 caractères maximum
 
 const T_GROUPES = { nom: 'Groupes', cols: ['cle', 'classe', 'nom', 'membres', 'empreinte', 'sel', 'mise_a_jour', 'nb_seances'] };
+const T_ELEVES = { nom: 'Eleves', cols: ['classe_eps', 'nom', 'prenom', 'classe'] };
+const T_CLASSES = { nom: 'Classes', cols: ['classe', 'code'] };
 const T_OBS = { nom: 'Observations', cols: ['id', 'date', 'classe', 'groupe_observateur', 'observateurs', 'groupe_observe', 'reussis', 'criteres_notes', 'erreurs_securite', 'detail_securite'] };
 
 function doGet() {
@@ -37,14 +40,35 @@ function traiter_(req) {
   const a = req.action;
   if (a === 'ping') return { ok: true };
 
+  const estProf = String(req.teacher || '') === MOT_DE_PASSE_PROF;
+
+  // ---- classes : noms seulement (public) ----
+  if (a === 'listClasses') {
+    const codes = {};
+    lignes_(T_CLASSES).forEach(r => codes[norm_(r.v[0])] = String(r.v[1] || ''));
+    const noms = {};
+    lignes_(T_CLASSES).forEach(r => noms[norm_(r.v[0])] = r.v[0]);
+    lignes_(T_ELEVES).forEach(r => { if (!noms[norm_(r.v[0])]) noms[norm_(r.v[0])] = r.v[0]; });
+    return { ok: true, classes: Object.keys(noms).map(k => ({ nom: noms[k], protege: !!codes[k] })) };
+  }
+
+  // ---- liste des élèves d'une classe (code de classe si défini) ----
+  if (a === 'listStudents') {
+    if (!estProf) verifierCode_(req.classe, req.code);
+    const c = norm_(req.classe);
+    return { ok: true, students: lignes_(T_ELEVES).filter(r => norm_(r.v[0]) === c).map(r => ({ nom: r.v[1], prenom: r.v[2], classe: r.v[3] })) };
+  }
+
   // ---- lecture publique : liste des groupes d'une classe (sans données) ----
   if (a === 'listGroups') {
+    if (!estProf) verifierCode_(req.classe, req.code);
     const c = norm_(req.classe);
     return { ok: true, groups: lignes_(T_GROUPES).filter(r => norm_(r.v[1]) === c).map(r => ({ nom: r.v[2], membres: r.v[3], maj: r.v[6], seances: r.v[7] })) };
   }
 
   // ---- lecture publique : chorégraphie d'un groupe (pour l'observer) ----
   if (a === 'getRoutine') {
+    if (!estProf) verifierCode_(req.classe, req.code);
     const l = trouverGroupe_(cle_(req.classe, req.nom));
     if (!l) throw new Error('Groupe introuvable');
     const d = lireDonnees_(T_GROUPES, l.row) || {};
@@ -53,6 +77,7 @@ function traiter_(req) {
   }
 
   if (a === 'create') {
+    if (!estProf) verifierCode_(req.classe, req.code);
     return verrou_(function () {
       const cle = cle_(req.classe, req.nom);
       if (!req.password || String(req.password).length < 4) throw new Error('Mot de passe trop court (4 caractères minimum)');
@@ -89,6 +114,25 @@ function traiter_(req) {
 
   if (a === 'teacherList') {
     return { ok: true, groups: lignes_(T_GROUPES).map(r => ({ key: r.v[0], classe: r.v[1], nom: r.v[2], membres: r.v[3], maj: r.v[6], seances: r.v[7] })) };
+  }
+  if (a === 'teacherSetStudents') {
+    return verrou_(function () {
+      const c = norm_(req.classe);
+      if (!c) throw new Error('Nom de classe manquant');
+      const f = feuille_(T_ELEVES);
+      const garder = lignes_(T_ELEVES).filter(r => norm_(r.v[0]) !== c).map(r => r.v);
+      const nouveaux = (req.students || []).map(e => [String(req.classe).trim(), String(e.nom || ''), String(e.prenom || ''), String(e.classe || '')]);
+      const tout = garder.concat(nouveaux);
+      const n = f.getLastRow() - 1;
+      if (n > 0) f.getRange(2, 1, n, T_ELEVES.cols.length).clearContent();
+      if (tout.length) f.getRange(2, 1, tout.length, T_ELEVES.cols.length).setValues(tout);
+      const fc = feuille_(T_CLASSES);
+      const lc = lignes_(T_CLASSES).find(r => norm_(r.v[0]) === c);
+      const code = String(req.code || '').trim();
+      if (lc) fc.getRange(lc.row, 1, 1, 2).setValues([[String(req.classe).trim(), code]]);
+      else fc.getRange(fc.getLastRow() + 1, 1, 1, 2).setValues([[String(req.classe).trim(), code]]);
+      return { ok: true, count: nouveaux.length };
+    });
   }
   if (a === 'teacherObservations') {
     return { ok: true, observations: lignes_(T_OBS).map(r => resumeObs_(r.v)) };
@@ -141,6 +185,13 @@ function ecrireObs_(obs, ligneGroupe) {
 }
 function resumeObs_(v) {
   return { id: v[0], date: v[1], classe: v[2], observateur: v[3], observateurs: v[4], observe: v[5], reussis: v[6], total: v[7], securite: v[8], detailSecurite: v[9] };
+}
+
+// ---------- code de classe ----------
+function verifierCode_(classe, code) {
+  const l = lignes_(T_CLASSES).find(r => norm_(r.v[0]) === norm_(classe));
+  const attendu = l ? String(l.v[1] || '').trim() : '';
+  if (attendu && norm_(code) !== norm_(attendu)) throw new Error('Code de classe incorrect');
 }
 
 // ---------- groupes ----------
