@@ -7,4 +7,4 @@ Application web (PWA) d'acrosport pour tablettes, hébergée sur GitHub Pages de
 - `sw.js` : service worker (réseau d'abord pour la page → mises à jour automatiques ; vidéos servies depuis le cache `acro-videos-v1` si téléchargées). Changer `CORE` (acro-core-vN) si on ajoute des fichiers à `CORE_FILES`.
 - `apps-script/Code.gs` : serveur Google Apps Script (Google Sheet) pour la sauvegarde en ligne. L'URL /exec se règle dans `API_DEFAULT` de `index.html` ou dans l'espace enseignant.
 - Interface et textes en français ; utilisateurs : lycéens (classe EPS « 1GT », élèves de 1G1-1G4 et 1STMG) et leur enseignant d’EPS. Classes et listes d’élèves : onglets « Classes » et « Eleves » de la Google Sheet (jamais de noms d’élèves dans ce dépôt public).
-- Code enseignant local par défaut : `eps`. Pour limiter le nombre de pyramides d'une leçon : lien `#pyramides-N`.
+- Espace enseignant (⚙) : mot de passe enseignant du script, vérifié en ligne (action teacherCheck) ; empreinte locale pour l'accès hors connexion. Code `eps` seulement si aucun script n'est configuré. Pour limiter le nombre de pyramides d'une leçon : lien `#pyramides-N`.

@@ -27,7 +27,7 @@ C'est ce lien que tu ouvres sur les tablettes.
 Sur chaque tablette Android, ouvre le lien dans **Chrome** → menu **⋮** → **Installer l'application** (ou *Ajouter à l'écran d'accueil*).
 L'icône Acrosport apparaît comme une vraie appli, en plein écran.
 
-**Sans internet au gymnase ?** Espace enseignant (⚙, code `eps`) → **Télécharger les vidéos** : les 176 vidéos sont copiées dans la tablette (≈ 170 Mo), une fois pour toutes.
+**Sans internet au gymnase ?** Espace enseignant (⚙, ton mot de passe enseignant) → **Télécharger les vidéos** : les 176 vidéos sont copiées dans la tablette (≈ 170 Mo), une fois pour toutes.
 
 **Mises à jour :** à chaque modification publiée sur GitHub, les tablettes reçoivent la nouvelle version à la prochaine ouverture avec internet. Rien à réinstaller.
 
@@ -50,8 +50,9 @@ L'icône Acrosport apparaît comme une vraie appli, en plein écran.
 - **Accueil** : l'élève touche sa **classe**, choisit son **groupe** dans la liste (ou le crée avec « + Créer un nouveau groupe » : nom, mot de passe, prénoms), tape le **mot de passe** et entre. Les groupes de la classe sont affichés en bas de l'accueil.
 - **Enregistrer ma progression** envoie tout en ligne. Si la tablette n'a pas de réseau, c'est gardé et **envoyé automatiquement** dès que la connexion revient (le badge en haut indique « ⏳ Envoi dès connexion » puis « ☁ En ligne ✓ »).
 - **Observation** : le groupe choisit le **groupe observé** → son enchaînement enregistré (pyramides, rôles, transitions) s'affiche avec les critères en colonnes (Porteur / Voltigeur / Pareur, puis Collectif et Sécurité). On coche les observateurs, on note, puis **Enregistrer l'observation**.
-- **Toi** : ⚙ → **En ligne** → ton mot de passe enseignant →
-  - **Voir tous les groupes en ligne** : **Ouvrir** (tu peux tout modifier puis enregistrer) ou **Mot de passe** (si un groupe l'a oublié) ;
+- **Accès à l'espace enseignant (⚙)** : ton mot de passe enseignant (celui de la ligne 13 du script), vérifié en ligne. Sur une tablette où tu t'es déjà connecté, il marche aussi sans internet.
+- **Toi** : ⚙ → **En ligne** →
+  - **Voir tous les groupes en ligne** : **Ouvrir** (tu peux tout modifier puis enregistrer), **✏️ Modifier** (nom, classe, élèves), **Mot de passe** (si un groupe l'a oublié) ou **🗑 Supprimer** ;
   - **Voir les observations** : tableau *qui a observé qui*, date, critères réussis, nombre d'erreurs de sécurité, détail complet avec **Voir**.
 - La Google Sheet contient deux onglets : **Groupes** et **Observations** (qui a observé qui, quand, résultat, erreurs de sécurité nommées). Les mots de passe n'y sont jamais en clair.
 - Seuls les prénoms des élèves sont enregistrés, dans ton propre Google Drive.

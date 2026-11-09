@@ -112,6 +112,7 @@ function traiter_(req) {
   // ---- actions enseignant ----
   if (String(req.teacher || '') !== MOT_DE_PASSE_PROF) throw new Error('Mot de passe enseignant incorrect');
 
+  if (a === 'teacherCheck') return { ok: true };
   if (a === 'teacherList') {
     return { ok: true, groups: lignes_(T_GROUPES).map(r => ({ key: r.v[0], classe: r.v[1], nom: r.v[2], membres: r.v[3], maj: r.v[6], seances: r.v[7] })) };
   }
@@ -156,6 +157,19 @@ function traiter_(req) {
     return verrou_(function () {
       ecrireGroupe_(ligne.row, ligne.cle, ligne.classe, ligne.nom, req.data, ligne.empreinte, ligne.sel);
       return { ok: true };
+    });
+  }
+  if (a === 'teacherUpdateGroup') {
+    return verrou_(function () {
+      const classe = String(req.classe || ligne.classe).trim();
+      const nom = String(req.nom || ligne.nom).trim();
+      const nouvelleCle = cle_(classe, nom);
+      if (nouvelleCle !== ligne.cle && trouverGroupe_(nouvelleCle)) throw new Error('Ce nom de groupe existe déjà dans cette classe');
+      const d = lireDonnees_(T_GROUPES, ligne.row) || {};
+      d.name = nom; d.classe = classe;
+      if (Array.isArray(req.members) && req.members.length) d.members = req.members.map(String);
+      ecrireGroupe_(ligne.row, nouvelleCle, classe, nom, d, ligne.empreinte, ligne.sel);
+      return { ok: true, key: nouvelleCle };
     });
   }
   if (a === 'teacherSetPassword') {
