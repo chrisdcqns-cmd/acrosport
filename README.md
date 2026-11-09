@@ -47,9 +47,14 @@ L'icône Acrosport apparaît comme une vraie appli, en plein écran.
    *(Plus simple : donne-moi cette URL, je l'inscris directement dans l'appli et elle sera réglée sur toutes les tablettes.)*
 
 ### Comment ça marche ensuite
-- **Élèves** : à la création du groupe, ils choisissent un **nom de groupe** et un **mot de passe**. À la fin de la leçon, « Enregistrer ma progression » envoie tout en ligne. La fois suivante, sur n'importe quelle tablette : **Retrouver notre groupe en ligne** → classe + nom du groupe + mot de passe.
-- **Toi** : ⚙ → **En ligne** → ton mot de passe enseignant → **Voir tous les groupes en ligne** → **Ouvrir** (tu peux tout modifier puis enregistrer) ou **Mot de passe** (si un groupe l'a oublié).
-- La Google Sheet t'affiche la liste des groupes, leurs élèves, la date de mise à jour et le nombre de séances. Les mots de passe n'y sont jamais en clair.
+- **Accueil** : l'élève touche sa **classe**, choisit son **groupe** dans la liste (ou le crée avec « + Créer un nouveau groupe » : nom, mot de passe, prénoms), tape le **mot de passe** et entre. Les groupes de la classe sont affichés en bas de l'accueil.
+- **Enregistrer ma progression** envoie tout en ligne. Si la tablette n'a pas de réseau, c'est gardé et **envoyé automatiquement** dès que la connexion revient (le badge en haut indique « ⏳ Envoi dès connexion » puis « ☁ En ligne ✓ »).
+- **Observation** : le groupe choisit le **groupe observé** → son enchaînement enregistré (pyramides, rôles, transitions) s'affiche avec les critères en colonnes (Porteur / Voltigeur / Pareur, puis Collectif et Sécurité). On coche les observateurs, on note, puis **Enregistrer l'observation**.
+- **Toi** : ⚙ → **En ligne** → ton mot de passe enseignant →
+  - **Voir tous les groupes en ligne** : **Ouvrir** (tu peux tout modifier puis enregistrer) ou **Mot de passe** (si un groupe l'a oublié) ;
+  - **Voir les observations** : tableau *qui a observé qui*, date, critères réussis, nombre d'erreurs de sécurité, détail complet avec **Voir**.
+- La Google Sheet contient deux onglets : **Groupes** et **Observations** (qui a observé qui, quand, résultat, erreurs de sécurité nommées). Les mots de passe n'y sont jamais en clair.
 - Seuls les prénoms des élèves sont enregistrés, dans ton propre Google Drive.
+- Les classes proposées à l'accueil (TMELEC, TTBMA) se changent dans ⚙ → **Classes**.
 
 Si tu modifies `Code.gs` plus tard : **Déployer → Gérer les déploiements → ✏️ → Version : Nouvelle version** (l'URL ne change pas).

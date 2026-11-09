@@ -1,5 +1,5 @@
 /**
- * Acrosport EPS — sauvegarde en ligne des groupes
+ * Acrosport EPS — sauvegarde en ligne des groupes et des observations
  * À coller dans Google Apps Script (Extensions > Apps Script depuis une Google Sheet).
  *
  * 1. Remplace MOT_DE_PASSE_PROF ci-dessous par ton mot de passe enseignant.
@@ -7,13 +7,16 @@
  *      Exécuter en tant que : Moi
  *      Qui a accès : Tout le monde
  * 3. Copie l'URL qui se termine par /exec et colle-la dans l'appli (Espace enseignant > En ligne).
+ *    Après une modification de ce fichier : Déployer > Gérer les déploiements > ✏️ > Version : Nouvelle version.
  *
  * Les mots de passe ne sont jamais enregistrés en clair : seule une empreinte (SHA-256 + sel) est gardée.
+ * Onglet « Groupes » : un groupe par ligne. Onglet « Observations » : qui a observé qui, quand, avec quel résultat.
  */
 const MOT_DE_PASSE_PROF = 'change-moi';
-const ONGLET = 'Groupes';
 const TAILLE_MORCEAU = 45000; // une cellule Google Sheets accepte 50 000 caractères maximum
-const COLONNES = ['cle', 'classe', 'nom', 'membres', 'empreinte', 'sel', 'mise_a_jour', 'nb_seances'];
+
+const T_GROUPES = { nom: 'Groupes', cols: ['cle', 'classe', 'nom', 'membres', 'empreinte', 'sel', 'mise_a_jour', 'nb_seances'] };
+const T_OBS = { nom: 'Observations', cols: ['id', 'date', 'classe', 'groupe_observateur', 'observateurs', 'groupe_observe', 'reussis', 'criteres_notes', 'erreurs_securite', 'detail_securite'] };
 
 function doGet() {
   return json_({ ok: true, app: 'acrosport' });
@@ -34,45 +37,80 @@ function traiter_(req) {
   const a = req.action;
   if (a === 'ping') return { ok: true };
 
+  // ---- lecture publique : liste des groupes d'une classe (sans données) ----
+  if (a === 'listGroups') {
+    const c = norm_(req.classe);
+    return { ok: true, groups: lignes_(T_GROUPES).filter(r => norm_(r.v[1]) === c).map(r => ({ nom: r.v[2], membres: r.v[3], maj: r.v[6], seances: r.v[7] })) };
+  }
+
+  // ---- lecture publique : chorégraphie d'un groupe (pour l'observer) ----
+  if (a === 'getRoutine') {
+    const l = trouverGroupe_(cle_(req.classe, req.nom));
+    if (!l) throw new Error('Groupe introuvable');
+    const d = lireDonnees_(T_GROUPES, l.row) || {};
+    const cur = d.current || {};
+    return { ok: true, routine: { nom: l.nom, classe: l.classe, members: d.members || [], slots: cur.slots || [], mats: (cur.mats || []).map(m => ({ text: m.text || '' })) } };
+  }
+
   if (a === 'create') {
     return verrou_(function () {
       const cle = cle_(req.classe, req.nom);
       if (!req.password || String(req.password).length < 4) throw new Error('Mot de passe trop court (4 caractères minimum)');
-      if (trouver_(cle)) throw new Error('Ce nom de groupe existe déjà dans cette classe');
+      if (trouverGroupe_(cle)) throw new Error('Ce nom de groupe existe déjà dans cette classe');
       const sel = Utilities.getUuid();
-      ecrire_(null, cle, req.classe, req.nom, req.data, hash_(req.password, sel), sel);
+      ecrireGroupe_(null, cle, req.classe, req.nom, req.data, hash_(req.password, sel), sel);
       return { ok: true };
     });
   }
 
-  if (a === 'load' || a === 'save') {
+  if (a === 'load' || a === 'save' || a === 'saveObservation' || a === 'myObservations') {
+    const prof = String(req.teacher || '') === MOT_DE_PASSE_PROF;
     const cle = cle_(req.classe, req.nom);
-    const ligne = trouver_(cle);
+    const ligne = trouverGroupe_(cle);
     if (!ligne) throw new Error('Groupe introuvable');
-    if (hash_(req.password, ligne.sel) !== ligne.empreinte) throw new Error('Mot de passe incorrect');
-    if (a === 'load') return { ok: true, data: lireDonnees_(ligne.row) };
-    return verrou_(function () {
-      ecrire_(ligne.row, cle, req.classe, req.nom, req.data, ligne.empreinte, ligne.sel);
-      return { ok: true };
-    });
+    if (!prof && hash_(req.password, ligne.sel) !== ligne.empreinte) throw new Error('Mot de passe incorrect');
+    if (a === 'load') return { ok: true, data: lireDonnees_(T_GROUPES, ligne.row) };
+    if (a === 'save') {
+      return verrou_(function () {
+        ecrireGroupe_(ligne.row, cle, ligne.classe, ligne.nom, req.data, ligne.empreinte, ligne.sel);
+        return { ok: true };
+      });
+    }
+    if (a === 'saveObservation') return verrou_(function () { ecrireObs_(req.obs, ligne); return { ok: true }; });
+    if (a === 'myObservations') {
+      const n = norm_(ligne.nom), c = norm_(ligne.classe);
+      const liste = lignes_(T_OBS).filter(r => norm_(r.v[2]) === c && (norm_(r.v[3]) === n || norm_(r.v[5]) === n));
+      return { ok: true, observations: liste.map(r => ({ resume: resumeObs_(r.v), data: lireDonnees_(T_OBS, r.row) })) };
+    }
   }
 
   // ---- actions enseignant ----
   if (String(req.teacher || '') !== MOT_DE_PASSE_PROF) throw new Error('Mot de passe enseignant incorrect');
 
   if (a === 'teacherList') {
-    const f = feuille_();
-    const n = f.getLastRow() - 1;
-    if (n < 1) return { ok: true, groups: [] };
-    const v = f.getRange(2, 1, n, COLONNES.length).getValues();
-    return { ok: true, groups: v.filter(r => r[0]).map(r => ({ key: r[0], classe: r[1], nom: r[2], membres: r[3], maj: r[6], seances: r[7] })) };
+    return { ok: true, groups: lignes_(T_GROUPES).map(r => ({ key: r.v[0], classe: r.v[1], nom: r.v[2], membres: r.v[3], maj: r.v[6], seances: r.v[7] })) };
   }
-  const ligne = trouver_(req.key);
+  if (a === 'teacherObservations') {
+    return { ok: true, observations: lignes_(T_OBS).map(r => resumeObs_(r.v)) };
+  }
+  if (a === 'teacherObservation') {
+    const r = lignes_(T_OBS).find(x => x.v[0] === req.id);
+    if (!r) throw new Error('Observation introuvable');
+    return { ok: true, data: lireDonnees_(T_OBS, r.row) };
+  }
+  if (a === 'teacherDeleteObservation') {
+    return verrou_(function () {
+      const r = lignes_(T_OBS).find(x => x.v[0] === req.id);
+      if (r) feuille_(T_OBS).deleteRow(r.row);
+      return { ok: true };
+    });
+  }
+  const ligne = trouverGroupe_(req.key);
   if (!ligne) throw new Error('Groupe introuvable');
-  if (a === 'teacherLoad') return { ok: true, data: lireDonnees_(ligne.row) };
+  if (a === 'teacherLoad') return { ok: true, data: lireDonnees_(T_GROUPES, ligne.row) };
   if (a === 'teacherSave') {
     return verrou_(function () {
-      ecrire_(ligne.row, ligne.cle, ligne.classe, ligne.nom, req.data, ligne.empreinte, ligne.sel);
+      ecrireGroupe_(ligne.row, ligne.cle, ligne.classe, ligne.nom, req.data, ligne.empreinte, ligne.sel);
       return { ok: true };
     });
   }
@@ -80,68 +118,88 @@ function traiter_(req) {
     if (!req.password || String(req.password).length < 4) throw new Error('Mot de passe trop court (4 caractères minimum)');
     return verrou_(function () {
       const sel = Utilities.getUuid();
-      feuille_().getRange(ligne.row, 5, 1, 2).setValues([[hash_(req.password, sel), sel]]);
+      feuille_(T_GROUPES).getRange(ligne.row, 5, 1, 2).setValues([[hash_(req.password, sel), sel]]);
       return { ok: true };
     });
   }
   if (a === 'teacherDelete') {
-    return verrou_(function () { feuille_().deleteRow(ligne.row); return { ok: true }; });
+    return verrou_(function () { feuille_(T_GROUPES).deleteRow(ligne.row); return { ok: true }; });
   }
   throw new Error('Action inconnue');
 }
 
-// ---------- outils ----------
-function feuille_() {
+// ---------- observations ----------
+function ecrireObs_(obs, ligneGroupe) {
+  if (!obs || !obs.id) throw new Error('Observation vide');
+  const s = obs.summary || {};
+  const tete = [obs.id, obs.date ? new Date(obs.date) : new Date(), ligneGroupe.classe, ligneGroupe.nom,
+    (obs.observers || []).join(', '), obs.observed && obs.observed.nom || '',
+    s.ok || 0, s.total || 0, (obs.safety || []).length,
+    (obs.safety || []).map(e => e.type + (e.moment ? ' (' + e.moment + ')' : '')).join(' ; ')];
+  const existante = lignes_(T_OBS).find(r => r.v[0] === obs.id);
+  ecrireLigne_(T_OBS, existante ? existante.row : null, tete, obs);
+}
+function resumeObs_(v) {
+  return { id: v[0], date: v[1], classe: v[2], observateur: v[3], observateurs: v[4], observe: v[5], reussis: v[6], total: v[7], securite: v[8], detailSecurite: v[9] };
+}
+
+// ---------- groupes ----------
+function trouverGroupe_(cle) {
+  const r = lignes_(T_GROUPES).find(x => x.v[0] === cle);
+  return r ? { row: r.row, cle: r.v[0], classe: r.v[1], nom: r.v[2], empreinte: r.v[4], sel: r.v[5] } : null;
+}
+function ecrireGroupe_(row, cle, classe, nom, data, empreinte, sel) {
+  const membres = (data && data.members || []).join(', ');
+  const nb = (data && data.sessions || []).length;
+  ecrireLigne_(T_GROUPES, row, [cle, classe, nom, membres, empreinte, sel, new Date(), nb], data);
+}
+
+// ---------- outils feuille ----------
+function feuille_(t) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  let f = ss.getSheetByName(ONGLET);
+  let f = ss.getSheetByName(t.nom);
   if (!f) {
-    f = ss.insertSheet(ONGLET);
-    f.getRange(1, 1, 1, COLONNES.length + 1).setValues([COLONNES.concat(['donnees (suite à droite)'])]);
+    f = ss.insertSheet(t.nom);
+    f.getRange(1, 1, 1, t.cols.length + 1).setValues([t.cols.concat(['donnees (suite à droite)'])]);
     f.setFrozenRows(1);
   }
   return f;
 }
-function cle_(classe, nom) {
-  const norm = s => String(s || '').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, ' ');
-  if (!norm(nom)) throw new Error('Nom de groupe manquant');
-  return norm(classe) + '|' + norm(nom);
-}
-function hash_(mdp, sel) {
-  const octets = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, sel + '|' + String(mdp || ''), Utilities.Charset.UTF_8);
-  return Utilities.base64Encode(octets);
-}
-function trouver_(cle) {
-  const f = feuille_();
+function lignes_(t) {
+  const f = feuille_(t);
   const n = f.getLastRow() - 1;
-  if (n < 1) return null;
-  const v = f.getRange(2, 1, n, COLONNES.length).getValues();
-  for (let i = 0; i < v.length; i++) {
-    if (v[i][0] === cle) return { row: i + 2, cle: v[i][0], classe: v[i][1], nom: v[i][2], empreinte: v[i][4], sel: v[i][5] };
-  }
-  return null;
+  if (n < 1) return [];
+  return f.getRange(2, 1, n, t.cols.length).getValues().map((v, i) => ({ row: i + 2, v: v })).filter(r => r.v[0]);
 }
-function lireDonnees_(row) {
-  const f = feuille_();
-  const debut = COLONNES.length + 1;
-  const largeur = Math.max(1, f.getLastColumn() - COLONNES.length);
+function lireDonnees_(t, row) {
+  const f = feuille_(t);
+  const debut = t.cols.length + 1;
+  const largeur = Math.max(1, f.getLastColumn() - t.cols.length);
   const morceaux = f.getRange(row, debut, 1, largeur).getValues()[0];
   const txt = morceaux.filter(x => x !== '').join('');
   return txt ? JSON.parse(txt) : null;
 }
-function ecrire_(row, cle, classe, nom, data, empreinte, sel) {
-  const f = feuille_();
+function ecrireLigne_(t, row, tete, data) {
+  const f = feuille_(t);
   const txt = JSON.stringify(data || {});
   const morceaux = [];
   for (let i = 0; i < txt.length; i += TAILLE_MORCEAU) morceaux.push(txt.slice(i, i + TAILLE_MORCEAU));
-  const membres = (data && data.members || []).join(', ');
-  const nb = (data && data.sessions || []).length;
-  const tete = [cle, classe, nom, membres, empreinte, sel, new Date(), nb];
   if (!row) row = f.getLastRow() + 1;
-  // efface les anciens morceaux puis écrit
-  const ancienne = f.getLastColumn() - COLONNES.length;
-  if (ancienne > 0) f.getRange(row, COLONNES.length + 1, 1, ancienne).clearContent();
+  const ancienne = f.getLastColumn() - t.cols.length;
+  if (ancienne > 0) f.getRange(row, t.cols.length + 1, 1, ancienne).clearContent();
   f.getRange(row, 1, 1, tete.length).setValues([tete]);
-  f.getRange(row, COLONNES.length + 1, 1, morceaux.length).setValues([morceaux]);
+  f.getRange(row, t.cols.length + 1, 1, morceaux.length).setValues([morceaux]);
+}
+function norm_(s) {
+  return String(s || '').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, ' ');
+}
+function cle_(classe, nom) {
+  if (!norm_(nom)) throw new Error('Nom de groupe manquant');
+  return norm_(classe) + '|' + norm_(nom);
+}
+function hash_(mdp, sel) {
+  const octets = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, sel + '|' + String(mdp || ''), Utilities.Charset.UTF_8);
+  return Utilities.base64Encode(octets);
 }
 function verrou_(fn) {
   const l = LockService.getScriptLock();

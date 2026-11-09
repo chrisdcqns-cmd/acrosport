@@ -225,6 +225,60 @@ body.online .onlyOffline{display:none}
 .syncBadge{font-size:.8rem;font-weight:800;padding:3px 10px;border-radius:99px;background:#ffffff26}
 .syncBadge.ok{background:var(--green)}.syncBadge.wait{background:var(--sun);color:var(--ink)}
 .gList{display:flex;flex-direction:column;gap:8px;max-height:55vh;overflow:auto}
+/* accueil v2 */
+.classPick{display:flex;gap:12px;flex-wrap:wrap}
+.classBtn{flex:1;min-width:150px;min-height:72px;border-radius:18px;background:var(--paper);box-shadow:inset 0 0 0 3px var(--line);font-family:"Barlow Condensed";font-weight:800;font-size:1.8rem;letter-spacing:.03em}
+.classBtn.on{background:var(--blue);color:#fff;box-shadow:none}
+.createBox{margin-top:14px;padding:16px;border-radius:16px;background:var(--paper)}
+.createBox h3{margin:0 0 10px;text-transform:uppercase;font-size:1.3rem}
+.gGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.gCard{background:var(--paper);border-radius:16px;padding:12px 14px;text-align:left;display:flex;flex-direction:column;gap:6px;border:2px solid transparent}
+.gCard:active,.gCard:focus{border-color:var(--blue)}
+.gCard b{font-family:"Barlow Condensed";font-size:1.4rem;text-transform:uppercase;line-height:1}
+.gCard .mem{display:flex;gap:4px;flex-wrap:wrap}
+.gCard .mem i{font-style:normal;background:#fff;border-radius:99px;padding:2px 9px;font-weight:600;font-size:.9rem}
+.gCard small{color:var(--ink2)}
+.gCard .warn{color:#8a5a00;font-weight:700}
+/* observation v2 */
+.obsTop{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;background:#fff;border-radius:18px;padding:12px 14px;margin-bottom:8px}
+.obsTop .field{margin:0}
+.chipsel{display:flex;gap:6px;flex-wrap:wrap}
+.chipsel button{background:var(--paper);border-radius:99px;padding:.5em 1em;font-weight:700;min-height:46px;box-shadow:inset 0 0 0 2px var(--line)}
+.chipsel button.on{background:var(--ink);color:#fff;box-shadow:none}
+.mark.lg{width:auto;height:auto;padding:3px 10px;font-size:.9rem}
+.figObs{background:#fff;border-radius:18px;padding:10px 12px;margin-bottom:10px}
+.figHead{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.figHead img{width:74px;height:54px;object-fit:contain}
+.figHead b{font-family:"Barlow Condensed";font-size:1.35rem;text-transform:uppercase}
+.figHead .sc{margin-left:auto;font-weight:800;color:var(--green)}
+.cols3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.cols2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:4px}
+@media(max-width:820px){.cols3,.cols2{grid-template-columns:1fr}}
+.ocol{background:var(--paper);border-radius:14px;padding:8px 10px}
+.ocolHead{display:flex;align-items:flex-end;gap:6px;border-bottom:2px solid var(--line);padding-bottom:4px;margin-bottom:4px}
+.ocolHead>b{font-family:"Barlow Condensed";font-size:1.15rem;text-transform:uppercase;color:var(--blue);flex:1}
+.ocolHead .whos{display:flex;gap:4px}
+.ocolHead .whos span{width:46px;text-align:center;font-size:.72rem;font-weight:700;line-height:1.1;overflow:hidden}
+.ocolHead .whos .role{min-width:0;padding:0 4px;margin:0 0 2px;display:inline-block}
+.crow{display:flex;align-items:center;gap:6px;padding:3px 0}
+.cname{flex:1;text-align:left;font-weight:600;font-size:.92rem;line-height:1.15;min-height:40px}
+.cname i{font-style:normal;color:var(--ink2);font-size:.8rem}
+.cm{display:flex;gap:4px}
+.crow .mark{width:46px;height:40px;font-size:1.05rem}
+.cdesc{font-size:.84rem;color:var(--ink2);background:#fff;border-radius:10px;padding:6px 8px;margin:0 0 4px}
+.parSel{min-height:40px;padding:.3em .5em;margin-bottom:4px}
+.transLine{margin:-4px 0 10px 22px;color:var(--ink2);font-weight:600}
+.ocol.safety{background:#fff;border:3px solid var(--coral)}
+.ocol.safety .safeBtns button{min-height:44px;padding:.45em .8em;font-size:.9rem}
+.obsLine{display:flex;align-items:center;gap:12px;background:#fff;border-radius:14px;padding:10px 12px;flex-wrap:wrap}
+.obsLine .ol{display:flex;gap:12px;flex:1;flex-wrap:wrap;align-items:center}
+.obsLine.big{background:var(--paper);margin:6px 0 12px;gap:14px}
+.okS{font-weight:800;color:var(--green)}.badS{font-weight:800;color:var(--coral)}
+.okNote{background:#d6f2e5}
+.tObs{width:100%;border-collapse:collapse;font-size:.92rem}
+.tObs th{text-align:left;font-size:.75rem;text-transform:uppercase;color:var(--ink2);padding:4px}
+.tObs td{border-top:1px solid var(--line);padding:6px 4px;vertical-align:middle}
+.mark:disabled{opacity:1;cursor:default}
 .note{background:#fff4d1;border-radius:12px;padding:10px 14px;margin:10px 0}
 .history{margin-top:28px}
 .history h3{text-transform:uppercase;font-size:1.3rem;margin:0 0 8px}
@@ -259,51 +313,38 @@ body.online .onlyOffline{display:none}
   </div>
 
   <div class="panel">
-    <h2>Notre groupe</h2>
-    <div class="row" style="gap:14px">
-      <div class="field" style="flex:1;min-width:180px">
-        <label for="gClasse">Classe</label>
-        <select id="gClasse" class="inp">
-          <option>TMELEC</option><option>TTBMA</option><option>Autre</option>
-        </select>
-      </div>
-      <div class="field" style="flex:2;min-width:220px">
-        <label for="gName">Nom du groupe <span class="onlyOnline">(obligatoire pour l'enregistrement en ligne)</span><span class="onlyOffline">(facultatif)</span></label>
-        <input id="gName" class="inp" placeholder="ex. Les Équilibristes" maxlength="40">
-      </div>
-    </div>
-    <div class="field onlyOnline">
-      <label for="gPw">Mot de passe du groupe (au choix, 4 caractères minimum)</label>
-      <input id="gPw" class="inp" type="password" autocomplete="new-password" placeholder="Pour retrouver votre progression sur n'importe quelle tablette" maxlength="40">
-    </div>
-    <div class="field">
-      <label>Les acrobates</label>
-      <div class="members" id="members"></div>
-    </div>
-    <div class="row">
-      <button class="btn alt small" id="addMember">+ Ajouter un acrobate</button>
-      <span class="sp" style="flex:1"></span>
-      <button class="btn sun" id="startBtn">C'est parti →</button>
-    </div>
+    <h2>1 · Ma classe</h2>
+    <div class="classPick" id="classPick"></div>
   </div>
 
-  <div class="panel onlyOnline" id="loginPanel">
-    <h2>Retrouver notre groupe en ligne</h2>
-    <div class="row" style="gap:14px">
-      <div class="field" style="flex:1;min-width:150px"><label for="lClasse">Classe</label>
-        <select id="lClasse" class="inp"><option>TMELEC</option><option>TTBMA</option><option>Autre</option></select></div>
-      <div class="field" style="flex:2;min-width:200px"><label for="lName">Nom du groupe</label><input id="lName" class="inp" maxlength="40"></div>
-      <div class="field" style="flex:2;min-width:200px"><label for="lPw">Mot de passe</label><input id="lPw" class="inp" type="password" autocomplete="current-password" maxlength="40"></div>
+  <div id="afterClass" class="hidden">
+    <div class="panel" id="accessPanel">
+      <h2>2 · Notre groupe</h2>
+      <div class="row" style="gap:14px;align-items:flex-end">
+        <div class="field" style="flex:2;min-width:220px"><label for="gSel">Groupe</label><select id="gSel" class="inp"></select></div>
+        <div class="field onlyOnline" style="flex:2;min-width:200px"><label for="gPwIn">Mot de passe</label><input id="gPwIn" class="inp" type="password" autocomplete="current-password" maxlength="40"></div>
+        <div class="field" style="flex:none"><button class="btn sun" id="enterBtn">Entrer →</button></div>
+      </div>
+      <p class="muted" id="listStatus" style="margin:0;font-size:.9rem"></p>
+      <div class="row" style="margin-top:10px"><button class="btn alt small" id="newGroupBtn">+ Créer un nouveau groupe</button></div>
+      <div id="createForm" class="createBox hidden">
+        <h3>Nouveau groupe</h3>
+        <div class="row" style="gap:14px">
+          <div class="field" style="flex:2;min-width:220px"><label for="gName">Nom du groupe</label><input id="gName" class="inp" placeholder="ex. Les Équilibristes" maxlength="40"></div>
+          <div class="field onlyOnline" style="flex:2;min-width:220px"><label for="gPw">Mot de passe (au choix, 4 caractères minimum)</label><input id="gPw" class="inp" type="password" autocomplete="new-password" maxlength="40"></div>
+        </div>
+        <div class="field"><label>Les acrobates</label><div class="members" id="members"></div></div>
+        <div class="row">
+          <button class="btn alt small" id="addMember">+ Ajouter un acrobate</button>
+          <span style="flex:1"></span>
+          <button class="btn sun" id="startBtn">Créer le groupe →</button>
+        </div>
+      </div>
     </div>
-    <button class="btn" id="loginBtn">Ouvrir notre progression →</button>
-  </div>
 
-  <div class="panel" id="savedPanel">
-    <h2>Reprendre ma progression</h2>
-    <div class="saved" id="savedList"></div>
-    <div class="row" style="margin-top:12px">
-      <label class="btn alt small" for="importFile">Importer une sauvegarde</label>
-      <input type="file" id="importFile" accept=".json,application/json" class="hidden">
+    <div class="panel">
+      <h2 id="listTitle">Les groupes</h2>
+      <div class="gGrid" id="groupGrid"></div>
     </div>
   </div>
 
@@ -361,10 +402,12 @@ let groups=store.get(K_GROUPS,{});
 let G=null;               // groupe courant
 /* ---------- en ligne ---------- */
 const API_DEFAULT="";      // URL du script Google (…/exec) : peut aussi être collée dans l'espace enseignant
-const PW={};               // mots de passe gardés en mémoire seulement (jamais sur la tablette)
+const K_PENDING="acro.pending.v1", K_OUTBOX="acro.outbox.v1", K_CACHE="acro.cache.v1";
+const PW={};               // mots de passe de la session en cours
 let teacherPw="";
 function apiUrl(){return (prof.api||API_DEFAULT||"").trim()}
 function refreshOnlineUI(){document.body.classList.toggle("online",!!apiUrl())}
+function norm(s){return String(s||"").trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/\s+/g," ")}
 async function api(action,payload={}){
   const url=apiUrl(); if(!url) throw new Error("Enregistrement en ligne non configuré");
   const ctl=new AbortController(); const tm=setTimeout(()=>ctl.abort(),25000);
@@ -375,11 +418,11 @@ async function api(action,payload={}){
     return j;
   }catch(e){
     if(e.server) throw e;
-    throw Object.assign(new Error("Pas de connexion internet (ou serveur injoignable)"),{network:true});
+    throw Object.assign(new Error("Pas de connexion internet"),{network:true});
   }finally{clearTimeout(tm)}
 }
 function cleanForCloud(g){
-  const o=JSON.parse(JSON.stringify(g)); delete o.online; delete o.dirty;
+  const o=JSON.parse(JSON.stringify(g)); ["online","dirty","pwh","obsDraft","obsLog"].forEach(k=>delete o[k]);
   (o.current&&o.current.mats||[]).forEach(m=>delete m.img); (o.sessions||[]).forEach(s=>(s.mats||[]).forEach(m=>delete m.img));
   return o;
 }
@@ -394,43 +437,71 @@ function askPassword(title){
     setTimeout(()=>m.querySelector("#askPw").focus(),50);
   });
 }
-async function syncOnline(){
-  if(!G||!G.online||!apiUrl()) return "local";
-  const data=cleanForCloud(G);
-  try{
-    if(G.online.teacherKey){
-      if(!teacherPw){const p=await askPassword("Mot de passe enseignant");if(!p)return "wait";teacherPw=p}
-      await api("teacherSave",{teacher:teacherPw,key:G.online.teacherKey,data});
-    }else{
-      let pw=PW[G.id];
-      if(!pw){pw=await askPassword("Mot de passe du groupe");if(!pw)return "wait";PW[G.id]=pw}
-      if(G.online.pendingCreate){await api("create",{classe:G.online.classe,nom:G.online.nom,password:pw,data});delete G.online.pendingCreate}
-      else await api("save",{classe:G.online.classe,nom:G.online.nom,password:pw,data});
-    }
-    G.dirty=false;persist();setBadge("ok");return "ok";
-  }catch(e){
-    if(!e.network&&/Mot de passe/.test(e.message)){delete PW[G.id];if(G.online.teacherKey)teacherPw=""}
-    G.dirty=true;persist();setBadge("wait");
-    toast(e.message);return "wait";
-  }
+async function sha(s){
+  try{const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
+  catch(e){let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))|0;return "x"+h}
 }
+function rememberPending(id,pw){if(!pw)return;const p=store.get(K_PENDING,{});p[id]=pw;store.set(K_PENDING,p)}
+function forgetPending(id){const p=store.get(K_PENDING,{});if(id in p){delete p[id];store.set(K_PENDING,p)}}
+function credFor(g){
+  if(g.online&&g.online.teacherKey) return teacherPw?{teacher:teacherPw}:null;
+  const pw=PW[g.id]||store.get(K_PENDING,{})[g.id]; return pw?{password:pw}:null;
+}
+async function pushGroup(g){
+  const cred=credFor(g); if(!cred) return false;
+  const data=cleanForCloud(g);
+  if(g.online.teacherKey) await api("teacherSave",{teacher:cred.teacher,key:g.online.teacherKey,data});
+  else if(g.online.pendingCreate){await api("create",{classe:g.online.classe,nom:g.online.nom,password:cred.password,data});delete g.online.pendingCreate}
+  else await api("save",{classe:g.online.classe,nom:g.online.nom,password:cred.password,data});
+  g.dirty=false; forgetPending(g.id); groups[g.id]=g; store.set(K_GROUPS,groups); return true;
+}
+function outboxHas(pred){return store.get(K_OUTBOX,[]).some(pred)}
+let flushing=null, flushAgain=false;
+async function flushOnce(){
+  for(const g of Object.values(groups)){
+    if(!(g.dirty&&g.online)) continue;
+    try{await pushGroup(g)}catch(e){
+      if(e.network) return;
+      if(/Mot de passe/.test(e.message)){forgetPending(g.id);delete PW[g.id];toast(e.message)}
+    }
+  }
+  const box=store.get(K_OUTBOX,[]); const rest=[];
+  for(let k=0;k<box.length;k++){
+    try{await api("saveObservation",box[k].req)}
+    catch(e){if(e.network){rest.push(...box.slice(k));break} toast("Observation refusée : "+e.message)}
+  }
+  // garder ce qui a été ajouté pendant l'envoi
+  const now=store.get(K_OUTBOX,[]); const handled=new Set(box);
+  const added=now.filter(x=>!box.some(y=>y.req.obs.id===x.req.obs.id&&y.req.obs.date===x.req.obs.date));
+  store.set(K_OUTBOX,[...rest.filter(x=>!added.some(y=>y.req.obs.id===x.req.obs.id)),...added]);
+}
+function flushAll(){
+  if(!apiUrl()) return Promise.resolve();
+  if(flushing){flushAgain=true;return flushing}
+  flushing=(async()=>{do{flushAgain=false;await flushOnce()}while(flushAgain)})().finally(()=>{flushing=null;updateBadge()});
+  return flushing;
+}
+function pendingFor(g){return !!(g&&(g.dirty||outboxHas(it=>it.gid===g.id)))}
+function updateBadge(){
+  const b=document.getElementById("syncBadge"); if(!b) return;
+  if(!G||!G.online||!apiUrl()){b.classList.add("hidden");return}
+  b.classList.remove("hidden");
+  const wait=pendingFor(G);
+  b.className="syncBadge "+(wait?"wait":"ok");
+  b.textContent=(G.online.teacherKey?"Enseignant · ":"")+(wait?"⏳ Envoi dès connexion":"☁ En ligne ✓");
+}
+window.addEventListener("online",()=>flushAll());
+setInterval(()=>{if(navigator.onLine!==false)flushAll()},30000);
 function normGroup(g,meta){
   if(!g||typeof g!=="object") throw new Error("Données du groupe illisibles");
   g.id=g.id||("g"+Date.now().toString(36));
   g.members=Array.isArray(g.members)&&g.members.length?g.members:String(meta&&meta.membres||"").split(",").map(s=>s.trim()).filter(Boolean);
   g.classe=g.classe||(meta&&meta.classe)||""; g.name=g.name||(meta&&meta.nom)||"";
-  g.current=g.current&&typeof g.current==="object"?g.current:{slots:[],mats:[],obs:{},observer:""};
+  g.current=g.current&&typeof g.current==="object"?g.current:{slots:[],mats:[]};
   g.current.slots=g.current.slots||[];g.current.mats=g.current.mats||[];
   g.sessions=Array.isArray(g.sessions)?g.sessions:[];
   g.created=g.created||new Date().toISOString();
   return g;
-}
-function setBadge(st){
-  const b=document.getElementById("syncBadge"); if(!b) return;
-  if(!G||!G.online){b.classList.add("hidden");return}
-  b.classList.remove("hidden");
-  b.className="syncBadge "+(st==="ok"?"ok":st==="wait"?"wait":"");
-  b.textContent=G.online.teacherKey?"☁ Enseignant":st==="ok"?"☁ En ligne ✓":st==="wait"?"☁ À envoyer":"☁ En ligne";
 }
 let memoryOnly=false;
 
@@ -449,7 +520,60 @@ function toast(msg){const t=document.createElement("div");t.className="toast";t.
 function fmtDate(iso){try{return new Date(iso).toLocaleDateString("fr-FR",{weekday:"short",day:"numeric",month:"short"})+" "+new Date(iso).toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"})}catch(e){return iso}}
 
 /* ---------- ACCUEIL ---------- */
+const K_CLASS="acro.class";
+let homeClass=null, homeList=[];
 let draftMembers=["","",""];
+function classes(){return prof.classes&&prof.classes.length?prof.classes:["TMELEC","TTBMA"]}
+function findLocal(c,nom){return Object.values(groups).find(g=>norm(g.classe)===norm(c)&&norm(g.name)===norm(nom))}
+function renderClassPick(){
+  const box=document.getElementById("classPick");
+  box.innerHTML=classes().map(c=>`<button class="classBtn ${c===homeClass?"on":""}" data-c="${esc(c)}">${esc(c)}</button>`).join("");
+  box.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>selectClass(b.dataset.c));
+}
+async function selectClass(c){
+  homeClass=c; try{sessionStorage.setItem(K_CLASS,c)}catch(e){}
+  renderClassPick();
+  document.getElementById("afterClass").classList.remove("hidden");
+  document.getElementById("listTitle").textContent="Les groupes de "+c;
+  await loadGroupList();
+}
+async function groupsOfClass(c){
+  const locals=Object.values(groups).filter(g=>norm(g.classe)===norm(c)).map(g=>({nom:g.name||g.members.join(" · "),membres:g.members.join(", "),maj:g.updated||g.created,seances:g.sessions.length,local:g.id,pending:!!(g.online&&g.online.pendingCreate)}));
+  if(!apiUrl()) return {list:locals,offline:false};
+  let list, offline=false;
+  try{
+    list=(await api("listGroups",{classe:c})).groups;
+    const cache=store.get(K_CACHE,{}); cache[norm(c)]=list; store.set(K_CACHE,cache);
+  }catch(e){
+    if(!e.network) throw e;
+    list=store.get(K_CACHE,{})[norm(c)]||[]; offline=true;
+  }
+  for(const l of locals) if(!list.some(x=>norm(x.nom)===norm(l.nom))) list.push(l);
+  return {list,offline};
+}
+async function loadGroupList(){
+  const st=document.getElementById("listStatus");
+  st.textContent=apiUrl()?"Chargement des groupes…":"";
+  try{
+    const r=await groupsOfClass(homeClass);
+    homeList=r.list.sort((a,b)=>String(a.nom).localeCompare(String(b.nom),"fr"));
+    st.textContent=r.offline?"Hors connexion : liste gardée sur cette tablette.":"";
+  }catch(e){homeList=[];st.textContent=e.message}
+  const sel=document.getElementById("gSel");
+  sel.innerHTML=`<option value="">— choisis ton groupe —</option>`+homeList.map((g,k)=>`<option value="${k}">${esc(g.nom)}</option>`).join("");
+  const grid=document.getElementById("groupGrid");
+  grid.innerHTML=homeList.length?homeList.map((g,k)=>`<button class="gCard" data-k="${k}">
+      <b>${esc(g.nom)}</b>
+      <span class="mem">${String(g.membres||"").split(",").map(s=>s.trim()).filter(Boolean).map(m=>`<i>${esc(m)}</i>`).join("")}</span>
+      <small>${g.seances||0} séance${(g.seances||0)>1?"s":""}${g.maj?" · "+fmtDate(g.maj):""}</small>
+      ${g.pending?`<small class="warn">⏳ en attente d'envoi en ligne</small>`:""}</button>`).join("")
+    :`<p class="muted" style="margin:0;grid-column:1/-1">Aucun groupe pour l'instant dans cette classe. Crée le tien avec « + Créer un nouveau groupe ».</p>`;
+  grid.querySelectorAll(".gCard").forEach(b=>b.onclick=()=>{
+    sel.value=b.dataset.k;
+    document.getElementById("accessPanel").scrollIntoView({behavior:"smooth",block:"center"});
+    const pw=document.getElementById("gPwIn"); if(apiUrl()) setTimeout(()=>pw.focus(),300);
+  });
+}
 function renderMembers(){
   const box=document.getElementById("members");
   box.innerHTML=draftMembers.map((m,i)=>`<div class="member"><span class="num">${i+1}</span>
@@ -461,71 +585,76 @@ function renderMembers(){
 }
 document.getElementById("addMember").onclick=()=>{if(draftMembers.length<6){draftMembers.push("");renderMembers();
   document.querySelector(`#members input[data-i="${draftMembers.length-1}"]`).focus()}};
+document.getElementById("newGroupBtn").onclick=()=>{
+  const f=document.getElementById("createForm");f.classList.toggle("hidden");
+  if(!f.classList.contains("hidden")) setTimeout(()=>document.getElementById("gName").focus(),50);
+};
+async function enterGroup(g,pw){
+  g.online=g.online||{classe:homeClass,nom:g.name};
+  if(pw){PW[g.id]=pw;g.pwh=await sha(pw+"|"+g.id)}
+  G=g;persist();
+  document.getElementById("gPwIn").value="";
+  openApp();flushAll();
+}
+document.getElementById("enterBtn").onclick=async e=>{
+  const it=homeList[document.getElementById("gSel").value];
+  if(!it){toast("Choisis ton groupe");return}
+  if(!apiUrl()){const g=groups[it.local];if(g){G=g;openApp()}else toast("Groupe introuvable sur cette tablette");return}
+  const pw=document.getElementById("gPwIn").value;
+  if(!pw){toast("Entre le mot de passe du groupe");document.getElementById("gPwIn").focus();return}
+  const btn=e.currentTarget;btn.disabled=true;btn.textContent="Connexion…";
+  const local=findLocal(homeClass,it.nom);
+  const openLocal=async msg=>{
+    if(local&&local.pwh&&local.pwh===await sha(pw+"|"+local.id)){PW[local.id]=pw;G=local;document.getElementById("gPwIn").value="";openApp();toast(msg);return true}
+    return false;
+  };
+  try{
+    const r=await api("load",{classe:homeClass,nom:it.nom,password:pw});
+    const g=normGroup(r.data,{classe:homeClass,nom:it.nom});
+    if(local&&local.id===g.id){
+      if(local.dirty&&(local.updated||"")>(g.updated||"")){g.current=local.current;g.sessions=local.sessions;g.updated=local.updated;g.dirty=true}
+      g.obsDraft=local.obsDraft; g.obsLog=local.obsLog;
+    }
+    g.online={classe:homeClass,nom:it.nom};
+    await enterGroup(g,pw);
+  }catch(err){
+    if(err.network){ if(!(await openLocal("Hors connexion : tout sera envoyé en ligne au retour du réseau"))) toast("Pas de connexion, et ce groupe n'a jamais été ouvert sur cette tablette") }
+    else if(/introuvable/.test(err.message)&&local&&local.online&&local.online.pendingCreate){ if(!(await openLocal("Groupe pas encore envoyé en ligne : il le sera automatiquement"))) toast("Mot de passe incorrect") }
+    else toast(err.message);
+  }finally{btn.disabled=false;btn.textContent="Entrer →"}
+};
 document.getElementById("startBtn").onclick=async e=>{
   const names=draftMembers.map(s=>s.trim()).filter(Boolean);
-  if(names.length<2){toast("Entre au moins 2 prénoms");return}
-  const classe=document.getElementById("gClasse").value;
   const name=document.getElementById("gName").value.trim();
   const pw=apiUrl()?document.getElementById("gPw").value:"";
-  if(pw&&!name){toast("Donne un nom à ton groupe pour l'enregistrer en ligne");return}
-  if(pw&&pw.length<4){toast("Mot de passe : 4 caractères minimum");return}
-  const g={id:"g"+Date.now().toString(36),classe,name,members:names,created:new Date().toISOString(),
-     current:{slots:[],mats:[],obs:{},observer:""},sessions:[]};
-  if(pw){
-    g.online={classe,nom:name};
-    const btn=e.currentTarget;btn.disabled=true;btn.textContent="Création en ligne…";
-    try{await api("create",{classe,nom:name,password:pw,data:cleanForCloud(g)});toast("Groupe créé en ligne ✓")}
+  if(!name){toast("Donne un nom à ton groupe");return}
+  if(names.length<2){toast("Entre au moins 2 prénoms");return}
+  if(homeList.some(g=>norm(g.nom)===norm(name))){toast("Ce nom de groupe existe déjà dans la classe");return}
+  if(apiUrl()&&pw.length<4){toast("Mot de passe : 4 caractères minimum");return}
+  const g={id:"g"+Date.now().toString(36),classe:homeClass,name,members:names,created:new Date().toISOString(),
+     current:{slots:[],mats:[]},sessions:[]};
+  if(apiUrl()){
+    g.online={classe:homeClass,nom:name};
+    const btn=e.currentTarget;btn.disabled=true;btn.textContent="Création…";
+    try{await api("create",{classe:homeClass,nom:name,password:pw,data:cleanForCloud(g)});toast("Groupe créé en ligne ✓")}
     catch(err){
-      btn.disabled=false;btn.textContent="C'est parti →";
-      if(!err.network){toast(err.message);return}
-      g.online.pendingCreate=true;toast("Pas de connexion : le groupe sera créé en ligne au prochain enregistrement");
+      if(!err.network){toast(err.message);btn.disabled=false;btn.textContent="Créer le groupe →";return}
+      g.online.pendingCreate=true;g.dirty=true;rememberPending(g.id,pw);toast("Hors connexion : le groupe sera envoyé en ligne dès le retour du réseau");
     }
-    btn.disabled=false;btn.textContent="C'est parti →";
-    PW[g.id]=pw;
+    btn.disabled=false;btn.textContent="Créer le groupe →";
   }
-  G=g;persist();openApp();
-};
-document.getElementById("loginBtn").onclick=async e=>{
-  const classe=document.getElementById("lClasse").value, nom=document.getElementById("lName").value.trim(), pw=document.getElementById("lPw").value;
-  if(!nom||!pw){toast("Nom du groupe et mot de passe");return}
-  const btn=e.currentTarget;btn.disabled=true;btn.textContent="Connexion…";
-  try{
-    const r=await api("load",{classe,nom,password:pw});
-    const g=normGroup(r.data,{classe,nom});
-    g.online={classe,nom}; PW[g.id]=pw;
-    const local=groups[g.id];
-    if(local&&local.dirty&&(local.updated||"")>(g.updated||"")){Object.assign(g,{current:local.current,sessions:local.sessions,updated:local.updated});g.dirty=true}
-    G=g;persist();document.getElementById("lPw").value="";openApp();toast("Progression retrouvée ✓");
-  }catch(err){toast(err.message)}
-  finally{btn.disabled=false;btn.textContent="Ouvrir notre progression →"}
-};
-function renderSaved(){
-  const list=Object.values(groups).sort((a,b)=>(b.updated||b.created).localeCompare(a.updated||a.created));
-  const p=document.getElementById("savedPanel");
-  const box=document.getElementById("savedList");
-  box.innerHTML=list.length?list.map(g=>`<button class="savedItem" data-g="${g.id}">
-      <div><b>${esc(g.name||g.members.join(" · "))}</b>
-      <small>${esc(g.classe)} · ${esc(g.members.join(", "))}</small>
-      <small>${g.sessions.length} séance(s) enregistrée(s)${g.sessions.length?" · dernière : "+fmtDate(g.sessions[g.sessions.length-1].date):""}</small></div>
-      <span class="go">Ouvrir →</span></button>`).join("")
-    :`<p class="muted" style="margin:0">Aucun groupe enregistré sur cette tablette pour l'instant.</p>`;
-  box.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>{G=groups[b.dataset.g];openApp()});
-}
-document.getElementById("importFile").onchange=async e=>{
-  const f=e.target.files[0]; if(!f) return;
-  try{
-    const g=JSON.parse(await f.text());
-    if(!g||!g.id||!Array.isArray(g.members)) throw 0;
-    groups[g.id]=g; store.set(K_GROUPS,groups); renderSaved(); toast("Sauvegarde importée : "+(g.name||g.members.join(", ")));
-  }catch(err){toast("Fichier non reconnu")}
-  e.target.value="";
+  draftMembers=["","",""];renderMembers();
+  document.getElementById("gName").value="";document.getElementById("gPw").value="";
+  document.getElementById("createForm").classList.add("hidden");
+  await enterGroup(g,pw);
 };
 
 /* ---------- APP ---------- */
 let curTab="videos";
 let vFilter={f:null,t:null,lv:null};
 function openApp(){
-  setTimeout(()=>setBadge(G&&G.dirty?"wait":""),0);
+  obsGroupList=null; obsHistory=null;
+  setTimeout(updateBadge,0);
   document.getElementById("home").classList.add("hidden");
   document.getElementById("app").classList.remove("hidden");
   document.getElementById("memberChips").innerHTML=
@@ -540,13 +669,15 @@ document.getElementById("backHome").onclick=()=>{
   persist(); G=null;
   document.getElementById("app").classList.add("hidden");
   document.getElementById("home").classList.remove("hidden");
-  draftMembers=["","",""];renderMembers();renderSaved();
+  draftMembers=["","",""];renderMembers();
+  if(homeClass) loadGroupList();
 };
 document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>showTab(t.dataset.tab));
 function showTab(name){
   curTab=name;
   document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t.dataset.tab===name));
   ["videos","routine","obs"].forEach(k=>document.getElementById("tab-"+k).classList.toggle("hidden",k!==name));
+  document.getElementById("saveBtn").textContent=name==="obs"?"💾 Enregistrer l'observation":"💾 Enregistrer ma progression";
   if(name==="videos") renderVideos();
   if(name==="routine") renderRoutine();
   if(name==="obs") renderObs();
@@ -968,72 +1099,129 @@ const CRIT={
 };
 const SAFETY=["Appui dangereux (dos, articulation)","Bras / jambes non verrouillés","Dos creusé ou gros dos","Montée brutale (choc)","Manque de maintien / déséquilibre","Chute","Démontage non contrôlé (saut, vers l'arrière)","Pareur absent ou inattentif"];
 const MARKS=["","✗","~","✓"];
-let obsOpen={}; let safetyMoment="Général";
-function markBtn(c,key){const v=c.obs.marks[key]||0;return `<button class="mark m${v}" data-k="${esc(key)}">${MARKS[v]||"·"}</button>`}
-function critTable(c,group,cols,prefix){
-  // cols: [{id,label,color}]
+let safetyMoment="Général", obsInfo=null, obsGroupList=null, obsHistory=null;
+function newDraft(){return {id:"o"+Date.now().toString(36)+Math.random().toString(36).slice(2,6),observed:null,routine:null,observers:[],marks:{},pareur:{},safety:[],note:""}}
+function draft(){if(!G.obsDraft) G.obsDraft=newDraft(); return G.obsDraft}
+function obsSummary(o){let ok=0,total=0;for(const v of Object.values(o.marks||{})){if(v){total++;if(v===3)ok++}}return {ok,total}}
+function markBtn(o,key,ro){const v=(o.marks||{})[key]||0;return `<button class="mark m${v}" ${ro?"disabled":""} data-k="${esc(key)}">${MARKS[v]||"·"}</button>`}
+function critColumn(o,group,cols,prefix,ro,extra=""){
   const g=CRIT[group];
-  return `<div class="critBlock">${group==="collectif"?"":`<h4>${g.label}</h4>`}<div style="overflow-x:auto"><table class="obsTable"><thead><tr><th></th>${cols.map(col=>`<th>${col.label}</th>`).join("")}</tr></thead><tbody>
-    ${g.items.map(([id,t,dsc])=>`<tr><td><b>${t}</b><small>${dsc}</small></td>${cols.map(col=>`<td>${markBtn(c,prefix+"|"+col.id+"|"+id)}</td>`).join("")}</tr>`).join("")}
-  </tbody></table></div></div>`;
+  return `<div class="ocol"><div class="ocolHead"><b>${g.label}</b>${cols.length?`<div class="whos">${cols.map(c=>`<span>${c.label}</span>`).join("")}</div>`:""}</div>${extra}
+    ${cols.length?g.items.map(([id,t,dsc])=>{const ik=prefix+"|"+group+"|"+id;return `<div class="crow"><button class="cname" data-info="${ik}">${t} <i>ⓘ</i></button><div class="cm">${cols.map(c=>markBtn(o,prefix+"|"+c.id+"|"+id,ro)).join("")}</div></div>${obsInfo===ik?`<div class="cdesc">${dsc}</div>`:""}`}).join("")
+      :`<p class="muted" style="margin:6px 0">Aucun rôle dans cette figure.</p>`}</div>`;
 }
-function scoreOf(c,prefix){
-  let ok=0,tot=0;for(const [k,v] of Object.entries(c.obs.marks)) if(k.startsWith(prefix)&&v){tot++;if(v===3)ok++}
-  return tot?`${ok}/${tot} ✓`:"";
+function obsBody(o,ro){
+  const R=o.routine||{slots:[],mats:[],members:[]};
+  const figs=(R.slots||[]).map((s,i)=>({s,i,f:s&&s.fig&&byId[s.fig]})).filter(x=>x.f);
+  let h="";
+  if(!figs.length) h+=`<p class="note">Ce groupe n'a pas encore choisi de pyramides dans son enchaînement.</p>`;
+  figs.forEach(({s,i,f},k)=>{
+    const roles=rolesOf(f), who=r=>(s.roles&&s.roles[r])||"";
+    const lab=r=>`<span class="role ${r[0]}">${r}</span>${who(r)?" "+esc(who(r)):""}`;
+    const P=roles.filter(r=>r[0]==="P").map(r=>({id:r,label:lab(r)}));
+    const V=roles.filter(r=>r[0]==="V").map(r=>({id:r,label:lab(r)}));
+    const par=(o.pareur||{})[i]||"";
+    const parSel=ro?"":`<select class="inp parSel" data-pareur="${i}"><option value="">— qui pare ? —</option>${(R.members||[]).map(m=>`<option ${par===m?"selected":""}>${esc(m)}</option>`).join("")}</select>`;
+    const sc=(()=>{let ok=0,t=0;for(const [kk,v] of Object.entries(o.marks||{}))if(kk.startsWith("f"+i+"|")&&v){t++;if(v===3)ok++}return t?`${ok}/${t} ✓`:""})();
+    h+=`<div class="figObs"><div class="figHead"><img src="${f.img}" alt=""><div><b>Figure ${i+1}</b> · ${esc(f.code)} ${esc(T_SHORT[f.t])} <span class="fbadge ${f.f}">${f.f==="dyn"?"Dyn.":F_LABEL[f.f]}</span></div><span class="sc">${sc}</span></div>
+      <div class="cols3">${critColumn(o,"porteur",P,"f"+i,ro)}${critColumn(o,"voltigeur",V,"f"+i,ro)}${critColumn(o,"pareur",[{id:"PAR",label:esc(par||"Pareur")}],"f"+i,ro,parSel)}</div></div>`;
+    const t=(R.mats||[])[i]; if(k<figs.length-1&&t&&t.text) h+=`<div class="transLine">↓ Transition : ${esc(t.text)}</div>`;
+  });
+  const counts={};(o.safety||[]).forEach(e=>counts[e.type]=(counts[e.type]||0)+1);
+  const tot=(o.safety||[]).length;
+  const moments=["Général",...figs.map(x=>"Figure "+(x.i+1)),"Transitions"];
+  if(!moments.includes(safetyMoment)) safetyMoment="Général";
+  h+=`<div class="cols2">${critColumn(o,"collectif",[{id:"G",label:"Groupe"}],"col",ro)}
+    <div class="ocol safety"><div class="row" style="gap:10px"><h3>⚠ Sécurité</h3><span class="bigN ${tot?"bad":""}">${tot}</span><b>erreur${tot>1?"s":""}</b></div>
+      ${ro?"":`<div class="seg" style="margin:8px 0"><span class="lbl" style="min-width:0">Moment</span>${moments.map(m=>`<button data-moment="${m}" class="${m===safetyMoment?"on":""}">${m}</button>`).join("")}</div>
+      <div class="safeBtns">${SAFETY.map(t=>`<button data-err="${esc(t)}">${esc(t)}${counts[t]?`<span class="cnt">${counts[t]}</span>`:""}</button>`).join("")}<button data-err="?">+ Autre…</button></div>`}
+      ${tot?`<div class="safeLog">${o.safety.map((e,k)=>`<div class="safeItem"><b>${esc(e.type)}</b><span class="muted">${esc(e.moment)}</span>${ro?"":`<button data-delerr="${k}" aria-label="Retirer">×</button>`}</div>`).join("")}</div>`:(ro?`<p class="muted">Aucune erreur de sécurité.</p>`:"")}
+    </div></div>`;
+  if(ro&&o.note) h+=`<div class="note"><b>Remarques :</b> ${esc(o.note)}</div>`;
+  return h;
+}
+async function obsGroupsLoad(){
+  try{obsGroupList=(await groupsOfClass(G.classe)).list.filter(g=>norm(g.nom)!==norm(G.name))}catch(e){obsGroupList=[]}
+  if(curTab==="obs") renderObs();
+}
+async function fetchRoutine(nom){
+  if(apiUrl()){
+    try{return (await api("getRoutine",{classe:G.classe,nom})).routine}
+    catch(e){if(!e.network) throw e}
+  }
+  const l=findLocal(G.classe,nom);
+  if(l) return {nom:l.name,classe:l.classe,members:l.members,slots:l.current.slots,mats:(l.current.mats||[]).map(m=>({text:m.text||""}))};
+  throw new Error("Pas de connexion : chorégraphie indisponible");
+}
+async function loadHistory(){
+  const local=(G.obsLog||[]).map(o=>({o,src:"local"}));
+  let online=[];
+  if(apiUrl()&&G.online&&!G.online.teacherKey&&PW[G.id]){
+    try{online=(await api("myObservations",{classe:G.online.classe,nom:G.online.nom,password:PW[G.id]})).observations.map(x=>({o:x.data,src:"online"}))}catch(e){}
+  }
+  const byIdMap={};[...online,...local].forEach(x=>{if(x.o&&x.o.id&&!byIdMap[x.o.id])byIdMap[x.o.id]=x});
+  obsHistory=Object.values(byIdMap).sort((a,b)=>String(b.o.date).localeCompare(String(a.o.date)));
+  if(curTab==="obs") renderObs();
+}
+function obsLine(o){
+  const s=o.summary||obsSummary(o), n=(o.safety||[]).length;
+  const by=(o.observerGroup&&o.observerGroup.nom)||"";
+  return `<span><b>${esc((o.observers||[]).join(", ")||"?")}</b>${by?` <span class="muted">(${esc(by)})</span>`:""} → <b>${esc(o.observed&&o.observed.nom||"?")}</b></span>
+    <span class="muted">${o.date?fmtDate(o.date):""}</span><span class="okS">✓ ${s.ok}/${s.total}</span><span class="${n?"badS":"okS"}">⚠ ${n}</span>`;
+}
+function viewObs(o){
+  openModal(`<div class="sheet" style="max-width:1150px"><button class="close" data-close>×</button>
+    <h2 style="font-size:1.6rem">Observation</h2><div class="obsLine big">${obsLine(o)}</div>${obsBody(o,true)}</div>`);
 }
 function renderObs(){
-  ensureSlots();
-  const root=document.getElementById("tab-obs"), n=lessonN(), c=G.current;
-  if(!c.obs||!c.obs.marks) c.obs={marks:{},safety:[],pareur:{}};
-  const O=c.obs;
-  const opt=(sel,extra="")=>`<option value="">— qui ? —</option>${G.members.map(m=>`<option ${sel===m?"selected":""}>${esc(m)}</option>`).join("")}${extra}`;
-  let html=`<div class="lessonHead"><h2>Observation</h2>
-    <label class="muted" style="font-weight:700">Observateur :</label>
-    <select class="inp" id="observer" style="max-width:240px"><option value="">— choisir —</option>${G.members.map(m=>`<option ${c.observer===m?"selected":""}>${esc(m)}</option>`).join("")}<option ${c.observer==="Autre groupe"?"selected":""}>Autre groupe</option></select></div>
-    <div class="legend"><span>Touche une case pour changer :</span><span class="mark m1" style="width:auto;height:auto;padding:2px 10px">✗ non réussi</span><span class="mark m2" style="width:auto;height:auto;padding:2px 10px">~ en cours</span><span class="mark m3" style="width:auto;height:auto;padding:2px 10px">✓ réussi</span></div>`;
-  for(let i=0;i<n;i++){
-    const s=c.slots[i], f=s&&s.fig&&byId[s.fig];
-    const key="f"+i, open=obsOpen[key]!==false;
-    html+=`<div class="obsCard"><button class="obsHead" data-toggle="${key}">
-      ${f?`<img src="${f.img}" alt="">`:""}<span><b>Figure ${i+1}</b> ${f?`· ${esc(f.code)} ${esc(T_SHORT[f.t])}`:"· (non choisie)"}</span>
-      <span class="sc">${scoreOf(c,key+"|")}</span><span class="chev">${open?"▾":"▸"}</span></button>`;
-    if(open&&f){
-      const roles=rolesOf(f), who=r=>(s.roles&&s.roles[r])||"";
-      const P=roles.filter(r=>r[0]==="P").map(r=>({id:r,label:`<span class="role P">${r}</span>${esc(who(r))}`}));
-      const V=roles.filter(r=>r[0]==="V").map(r=>({id:r,label:`<span class="role V">${r}</span>${esc(who(r))}`}));
-      html+=critTable(c,"porteur",P,key)+critTable(c,"voltigeur",V,key)+
-        `<div class="row" style="margin:6px 0 0"><b>Pareur :</b><select class="inp" style="max-width:220px" data-pareur="${i}">${opt(O.pareur[i]||"",`<option ${O.pareur[i]==="Autre groupe"?"selected":""}>Autre groupe</option>`)}</select></div>`+
-        critTable(c,"pareur",[{id:"PAR",label:esc(O.pareur[i]||"Pareur")}],key);
-    } else if(open) html+=`<p class="muted" style="margin:8px 4px">Choisis d'abord cette pyramide dans « Mon enchaînement ».</p>`;
-    html+=`</div>`;
+  const root=document.getElementById("tab-obs"), o=draft();
+  if(obsGroupList===null){root.innerHTML=`<p class="muted">Chargement des groupes…</p>`;obsGroupsLoad();return}
+  if(obsHistory===null){obsHistory=[];loadHistory()}
+  const opts=obsGroupList.map(g=>`<option value="${esc(g.nom)}" ${o.observed&&norm(o.observed.nom)===norm(g.nom)?"selected":""}>${esc(g.nom)}${g.membres?" — "+esc(g.membres):""}</option>`).join("");
+  let html=`<div class="obsTop">
+      <div class="field" style="flex:2;min-width:240px"><label>Groupe observé</label><select class="inp" id="obsGroup"><option value="">— choisir —</option>${opts}</select></div>
+      <div class="field" style="flex:3;min-width:260px"><label>Observateur(s)</label><div class="chipsel">${G.members.map(m=>`<button data-obsr="${esc(m)}" class="${o.observers.includes(m)?"on":""}">${esc(m)}</button>`).join("")}</div></div>
+      <div class="field" style="flex:none"><label>&nbsp;</label><button class="btn alt small" id="obsNew">+ Nouvelle observation</button></div>
+    </div>
+    <div class="legend"><span>Touche une case :</span><span class="mark m1 lg">✗ non réussi</span><span class="mark m2 lg">~ en cours</span><span class="mark m3 lg">✓ réussi</span><span class="muted">ⓘ = détail du critère</span></div>`;
+  if(!o.routine) html+=`<div class="panel" style="text-align:center"><p style="margin:0"><b>Choisis le groupe observé</b> : son enchaînement enregistré s'affiche ici avec les critères.</p></div>`;
+  else{
+    html+=`<p class="sub" style="margin:4px 0 10px">Enchaînement de <b>${esc(o.routine.nom)}</b> · ${esc((o.routine.members||[]).join(", "))}</p>`+obsBody(o,false)+
+      `<div class="field" style="margin-top:14px"><label>Remarques</label><textarea class="inp" id="obsNote" rows="2">${esc(o.note||"")}</textarea></div>`;
   }
-  const ck="col", open=obsOpen[ck]!==false;
-  html+=`<div class="obsCard"><button class="obsHead" data-toggle="${ck}"><span><b>Enchaînement et collectif</b></span><span class="sc">${scoreOf(c,ck+"|")}</span><span class="chev">${open?"▾":"▸"}</span></button>
-    ${open?critTable(c,"collectif",[{id:"G",label:"Groupe"}],ck):""}</div>`;
-  // sécurité
-  const moments=["Général",...Array.from({length:n},(_,i)=>"Figure "+(i+1)),"Transitions"];
-  if(!moments.includes(safetyMoment)) safetyMoment="Général";
-  const counts={};O.safety.forEach(e=>counts[e.type]=(counts[e.type]||0)+1);
-  const tot=O.safety.length;
-  html+=`<div class="safety"><div class="row"><h3>⚠ Sécurité</h3><span class="bigN ${tot?"bad":""}">${tot}</span><span style="font-weight:700">erreur${tot>1?"s":""} de sécurité</span></div>
-    <p class="muted" style="margin:4px 0 10px">Choisis le moment, puis touche l'erreur observée à chaque fois qu'elle se produit.</p>
-    <div class="seg" style="margin-bottom:10px"><span class="lbl">Moment</span>${moments.map(m=>`<button data-moment="${m}" class="${m===safetyMoment?"on":""}">${m}</button>`).join("")}</div>
-    <div class="safeBtns">${SAFETY.map(t=>`<button data-err="${esc(t)}">${esc(t)}${counts[t]?`<span class="cnt">${counts[t]}</span>`:""}</button>`).join("")}<button data-err="?">+ Autre…</button></div>
-    ${tot?`<div class="safeLog">${O.safety.map((e,k)=>`<div class="safeItem"><b>${esc(e.type)}</b><span class="muted">${esc(e.moment)}</span><button data-delerr="${k}" aria-label="Retirer">×</button></div>`).join("")}</div>`:""}
-  </div>`;
-  html+=`<div class="field" style="margin-top:14px"><label>Remarques de l'observateur</label><textarea class="inp" id="obsNote" rows="3">${esc(c.obsNote||"")}</textarea></div>`;
+  html+=`<div class="history"><div class="row"><h3>Observations enregistrées</h3><button class="btn alt small" id="histRefresh">↻ Actualiser</button></div>
+    ${obsHistory.length?`<div class="saved">${obsHistory.map((x,k)=>`<div class="obsLine"><div class="ol">${obsLine(x.o)}</div><button class="btn small alt" data-view="${k}">Voir</button></div>`).join("")}</div>`
+      :`<p class="muted">Aucune observation pour l'instant.</p>`}</div>`;
   root.innerHTML=html;
-  root.querySelector("#observer").onchange=e=>{c.observer=e.target.value;persist()};
-  root.querySelector("#obsNote").oninput=e=>{c.obsNote=e.target.value;persist()};
-  root.querySelectorAll("[data-toggle]").forEach(b=>b.onclick=()=>{const k=b.dataset.toggle;obsOpen[k]=obsOpen[k]===false;renderObs()});
-  root.querySelectorAll("[data-pareur]").forEach(sel=>sel.onchange=()=>{O.pareur[sel.dataset.pareur]=sel.value;persist();renderObs()});
+  const sel=root.querySelector("#obsGroup");
+  sel.onchange=async()=>{
+    const nom=sel.value;
+    const go=async()=>{
+      if(!nom){o.observed=null;o.routine=null;persist();renderObs();return}
+      sel.disabled=true;
+      try{const r=await fetchRoutine(nom);const keep=o.observers;G.obsDraft=Object.assign(newDraft(),{observers:keep,observed:{classe:G.classe,nom:r.nom||nom},routine:r});persist();toast("Enchaînement de "+(r.nom||nom)+" importé")}
+      catch(e){toast(e.message)}
+      renderObs();
+    };
+    if(o.routine&&Object.keys(o.marks).length) confirmBox("Changer de groupe observé ? Les notes en cours non enregistrées seront effacées.",go,()=>renderObs()); else go();
+  };
+  root.querySelectorAll("[data-obsr]").forEach(b=>b.onclick=()=>{const m=b.dataset.obsr;const i=o.observers.indexOf(m);if(i<0)o.observers.push(m);else o.observers.splice(i,1);b.classList.toggle("on",i<0);persist()});
+  root.querySelector("#obsNew").onclick=()=>{
+    const reset=()=>{G.obsDraft=Object.assign(newDraft(),{observers:o.observers});persist();renderObs()};
+    if(Object.keys(o.marks).length||o.safety.length) confirmBox("Commencer une nouvelle observation ? Pense à enregistrer celle-ci avant.",reset); else reset();
+  };
+  root.querySelector("#histRefresh").onclick=()=>{obsGroupList=null;loadHistory();obsGroupsLoad()};
+  root.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>viewObs(obsHistory[+b.dataset.view].o));
+  const note=root.querySelector("#obsNote"); if(note) note.oninput=e=>{o.note=e.target.value;persist()};
+  root.querySelectorAll("[data-info]").forEach(b=>b.onclick=()=>{obsInfo=obsInfo===b.dataset.info?null:b.dataset.info;renderObs()});
+  root.querySelectorAll("[data-pareur]").forEach(s=>s.onchange=()=>{o.pareur[s.dataset.pareur]=s.value;persist();renderObs()});
   root.querySelectorAll(".mark[data-k]").forEach(b=>b.onclick=()=>{
-    const k=b.dataset.k, v=((O.marks[k]||0)+1)%4; if(v) O.marks[k]=v; else delete O.marks[k];
+    const k=b.dataset.k, v=((o.marks[k]||0)+1)%4; if(v) o.marks[k]=v; else delete o.marks[k];
     b.className="mark m"+v; b.textContent=MARKS[v]||"·"; persist();
-    const card=b.closest(".obsCard"); const sc=card&&card.querySelector(".sc"); if(sc) sc.textContent=scoreOf(c,k.split("|")[0]+"|");
+    const card=b.closest(".figObs"); if(card){const i=k.split("|")[0];let ok=0,t=0;for(const [kk,vv] of Object.entries(o.marks))if(kk.startsWith(i+"|")&&vv){t++;if(vv===3)ok++}card.querySelector(".sc").textContent=t?`${ok}/${t} ✓`:""}
   });
   root.querySelectorAll("[data-moment]").forEach(b=>b.onclick=()=>{safetyMoment=b.dataset.moment;renderObs()});
-  const addErr=t=>{O.safety.push({type:t,moment:safetyMoment,t:Date.now()});persist();renderObs();toast("Erreur notée : "+t)};
+  const addErr=t=>{o.safety.push({type:t,moment:safetyMoment,t:Date.now()});persist();renderObs();toast("Erreur notée : "+t)};
   root.querySelectorAll("[data-err]").forEach(b=>b.onclick=()=>{
     if(b.dataset.err!=="?"){addErr(b.dataset.err);return}
     const m=openModal(`<div class="sheet" style="max-width:480px"><button class="close" data-close>×</button><h2 style="font-size:1.5rem">Autre erreur de sécurité</h2>
@@ -1042,51 +1230,66 @@ function renderObs(){
     m.querySelector("#errOk").onclick=go;m.querySelector("#errTxt").onkeydown=e=>{if(e.key==="Enter")go()};
     setTimeout(()=>m.querySelector("#errTxt").focus(),50);
   });
-  root.querySelectorAll("[data-delerr]").forEach(b=>b.onclick=()=>{O.safety.splice(+b.dataset.delerr,1);persist();renderObs()});
+  root.querySelectorAll("[data-delerr]").forEach(b=>b.onclick=()=>{o.safety.splice(+b.dataset.delerr,1);persist();renderObs()});
 }
 
 /* ---------- enregistrer ---------- */
-document.getElementById("saveBtn").onclick=async()=>{
-  const snap=JSON.parse(JSON.stringify(G.current));
-  delete snap.dojoImg;
-  snap.date=new Date().toISOString(); snap.n=lessonN();
-  G.sessions.push(snap); G.updated=snap.date; persist();
-  const online=!!(G.online&&apiUrl());
-  const m=openModal(`<div class="sheet" style="max-width:560px"><button class="close" data-close>×</button>
-    <h2>Progression enregistrée ✓</h2>
-    <p>${memoryOnly?"<b>Attention :</b> cette tablette n'autorise pas l'enregistrement. Télécharge la sauvegarde pour ne rien perdre.":"Elle est gardée sur cette tablette."}</p>
-    ${online?`<p class="note" id="syncMsg">☁ Envoi en ligne…</p>`:`<p class="muted">Si vous changez de tablette, téléchargez la sauvegarde et importez-la sur l'autre tablette.</p>`}
-    <div class="row"><button class="btn" id="dlBtn">⬇ Télécharger la sauvegarde</button><button class="btn alt" data-close>Fermer</button></div>
-    <div id="dlFallback"></div></div>`);
-  m.querySelector("#dlBtn").onclick=()=>exportGroup(m.querySelector("#dlFallback"));
-  if(online){
-    const st=await syncOnline(); const box=m.querySelector("#syncMsg");
-    if(box) box.innerHTML=st==="ok"?(G.online.teacherKey?"☁ Modifications enregistrées en ligne ✓":`☁ Enregistrée en ligne ✓ — sur n'importe quelle tablette : « Retrouver notre groupe en ligne », groupe <b>${esc(G.online.nom)}</b> + votre mot de passe.`)
-      :"⚠ Pas envoyée en ligne pour l'instant (connexion ?). Elle est gardée sur la tablette et partira au prochain enregistrement.";
-  }
-};
-async function exportGroup(fallbackBox){
-  const data=JSON.stringify(G);
-  const fname=`acrosport_${(G.classe||"").replace(/\W+/g,"")}_${G.members.join("-").replace(/[^\wÀ-ÿ-]+/g,"")}.json`;
-  try{
-    if(window.claude&&window.claude.use){
-      const dl=await window.claude.use("downloads");
-      if(dl){await dl.save({filename:fname,data});return}
-    }
-  }catch(e){}
-  try{
-    const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([data],{type:"application/json"}));a.download=fname;
-    document.body.appendChild(a);a.click();a.remove();
-  }catch(e){}
-  fallbackBox.innerHTML=`<p class="muted" style="margin-top:12px">Si rien ne s'est téléchargé, copie ce code et garde-le (l'enseignant peut le recoller) :</p>
-    <textarea class="inp codebox" readonly>${esc(data)}</textarea>`;
+function statusBox(st,what){
+  if(st==="ok") return `<p class="note okNote">☁ ${what} enregistrée en ligne ✓</p>`;
+  if(st==="wait") return `<p class="note">⏳ ${what} enregistrée. Elle partira en ligne <b>automatiquement</b> dès que la tablette sera connectée.</p>`;
+  if(st==="nopw") return `<p class="note">⚠ Rouvre le groupe avec son mot de passe pour l'envoyer en ligne.</p>`;
+  return `<p class="muted">${what} enregistrée. (L'enregistrement en ligne n'est pas encore activé par l'enseignant.)</p>`;
 }
+async function saveProgress(){
+  const snap=JSON.parse(JSON.stringify(G.current));
+  snap.date=new Date().toISOString(); snap.n=lessonN();
+  G.sessions.push(snap); G.updated=snap.date;
+  const online=!!(G.online&&apiUrl());
+  if(online){G.dirty=true;if(!G.online.teacherKey)rememberPending(G.id,PW[G.id])}
+  persist();
+  const m=openModal(`<div class="sheet" style="max-width:560px"><button class="close" data-close>×</button>
+    <h2>Progression enregistrée</h2><div id="stBox">${online?`<p class="note">☁ Envoi en ligne…</p>`:statusBox("local","Elle est")}</div>
+    <div class="row"><button class="btn alt" data-close>Fermer</button></div></div>`);
+  if(online){
+    await flushAll();
+    const st=!G.dirty?"ok":credFor(G)?"wait":"nopw";
+    const box=m.querySelector("#stBox"); if(box) box.innerHTML=statusBox(st,"La progression est").replace("est enregistrée","est enregistrée");
+  }
+  updateBadge();
+}
+async function saveObservation(){
+  const o=draft();
+  if(!o.routine){toast("Choisis d'abord le groupe observé");return}
+  if(!o.observers.length){toast("Indique qui observe (Observateur(s))");return}
+  o.date=new Date().toISOString(); o.summary=obsSummary(o); o.observerGroup={classe:G.classe,nom:G.name};
+  const copy=JSON.parse(JSON.stringify(o));
+  G.obsLog=(G.obsLog||[]).filter(x=>x.id!==o.id); G.obsLog.push(copy); persist();
+  let st="local";
+  if(G.online&&apiUrl()){
+    const cred=G.online.teacherKey?(teacherPw?{teacher:teacherPw}:null):(PW[G.id]?{password:PW[G.id]}:null);
+    if(!cred) st="nopw";
+    else{
+      const box=store.get(K_OUTBOX,[]).filter(it=>it.req.obs.id!==o.id);
+      box.push({gid:G.id,req:{classe:G.online.classe,nom:G.online.nom,...cred,obs:copy}}); store.set(K_OUTBOX,box);
+      await flushAll();
+      st=outboxHas(it=>it.req.obs.id===o.id)?"wait":"ok";
+    }
+  }
+  const m=openModal(`<div class="sheet" style="max-width:600px"><button class="close" data-close>×</button>
+    <h2>Observation enregistrée</h2><div class="obsLine big">${obsLine(copy)}</div>${statusBox(st,"L'observation est").replace("Elle partira","Elle partira")}
+    <div class="row"><button class="btn sun" id="obsNext">+ Observer un autre passage</button><button class="btn alt" data-close>Fermer</button></div></div>`);
+  m.querySelector("#obsNext").onclick=()=>{G.obsDraft=Object.assign(newDraft(),{observers:o.observers});persist();closeModal();renderObs()};
+  obsHistory=null; if(curTab==="obs") renderObs();
+  updateBadge();
+}
+document.getElementById("saveBtn").onclick=()=>curTab==="obs"?saveObservation():saveProgress();
 
 /* ---------- confirmation intégrée ---------- */
-function confirmBox(msg,ok){
+function confirmBox(msg,ok,cancel){
   const m=openModal(`<div class="sheet" style="max-width:480px"><h2 style="font-size:1.5rem">Confirmer</h2><p>${esc(msg)}</p>
-   <div class="row"><button class="btn coral" data-ok>Oui</button><button class="btn alt" data-close>Annuler</button></div></div>`);
+   <div class="row"><button class="btn coral" data-ok>Oui</button><button class="btn alt" data-no>Annuler</button></div></div>`);
   m.querySelector("[data-ok]").onclick=()=>{closeModal();ok()};
+  m.querySelector("[data-no]").onclick=()=>{closeModal();cancel&&cancel()};
 }
 
 /* ---------- espace enseignant ---------- */
@@ -1115,12 +1318,14 @@ function profPanel(){
       <div class="field"><label>Adresse du script Google (se termine par /exec)</label><input class="inp" id="apiIn" value="${esc(prof.api||API_DEFAULT)}" placeholder="https://script.google.com/macros/s/…/exec"></div>
       <div class="row"><button class="btn alt small" id="apiTest">Tester la connexion</button></div>
       <div class="field" style="margin-top:12px"><label>Mot de passe enseignant (celui du script)</label><input class="inp" id="tPw" type="password" value="${esc(teacherPw)}"></div>
-      <div class="row"><button class="btn small" id="tList">Voir tous les groupes en ligne</button></div>
+      <div class="row"><button class="btn small" id="tList">Voir tous les groupes en ligne</button><button class="btn small" id="tObs">Voir les observations (qui a observé qui)</button></div>
       <div id="tGroups" style="margin-top:10px"></div>
     </div>
     <div class="panel"><h2 style="font-size:1.3rem">Hors connexion</h2>
       <p class="muted" style="margin-top:0">Télécharge toutes les vidéos sur cette tablette pour utiliser l'appli sans internet (version hébergée uniquement).</p>
       <div class="row"><button class="btn alt small" id="cacheVids">⬇ Télécharger les vidéos</button><span id="cacheMsg" class="muted"></span></div></div>
+    <div class="panel"><h2 style="font-size:1.3rem">Classes</h2>
+      <div class="field"><label>Classes proposées à l'accueil (séparées par des virgules)</label><input class="inp" id="classIn" value="${esc(classes().join(", "))}"></div></div>
     <div class="panel"><h2 style="font-size:1.3rem">Code enseignant</h2>
       <input class="inp" id="newPin" placeholder="Nouveau code (laisser vide pour garder)"></div>
     <div class="panel"><h2 style="font-size:1.3rem">Sauvegardes de la tablette</h2>
@@ -1133,10 +1338,10 @@ function profPanel(){
   m.querySelector("#nPlus").onclick=()=>{n=Math.min(12,n+1);out.textContent=n};
   m.querySelector("#pasteOk").onclick=()=>{
     try{const g=JSON.parse(m.querySelector("#pasteCode").value);if(!g.id||!Array.isArray(g.members))throw 0;
-      groups[g.id]=g;store.set(K_GROUPS,groups);renderSaved();toast("Groupe importé")}catch(e){toast("Code non reconnu")}
+      groups[g.id]=g;store.set(K_GROUPS,groups);if(homeClass)loadGroupList();toast("Groupe importé")}catch(e){toast("Code non reconnu")}
   };
   m.querySelector("#wipe").onclick=()=>confirmBox("Effacer TOUS les groupes et progressions de cette tablette ?",()=>{
-    groups={};store.set(K_GROUPS,groups);if(G){closeModal();document.getElementById("backHome").click()}renderSaved();toast("Tablette réinitialisée")});
+    groups={};store.set(K_GROUPS,groups);store.set(K_OUTBOX,[]);store.set(K_PENDING,{});if(G){closeModal();document.getElementById("backHome").click()}if(homeClass)loadGroupList();toast("Tablette réinitialisée")});
   m.querySelector("#apiTest").onclick=async()=>{
     prof.api=m.querySelector("#apiIn").value.trim();store.set(K_PROF,prof);refreshOnlineUI();
     try{await api("ping");toast("Connexion OK ✓")}catch(e){toast(e.message)}
@@ -1154,7 +1359,7 @@ function profPanel(){
       box.querySelectorAll("[data-open]").forEach(b=>b.onclick=async()=>{
         try{const r=await api("teacherLoad",{teacher:teacherPw,key:b.dataset.open});
           const meta=list.find(x=>x.key===b.dataset.open);const g=normGroup(r.data,meta);
-          g.online={classe:g.classe,nom:g.name,teacherKey:b.dataset.open};
+          g.online={classe:g.classe,nom:g.name,teacherKey:b.dataset.open};const loc=groups[g.id];if(loc){g.obsDraft=loc.obsDraft;g.obsLog=loc.obsLog}
           while(modalStack.length)closeModal();G=g;persist();openApp();toast("Groupe ouvert en mode enseignant")}catch(e){toast(e.message)}
       });
       box.querySelectorAll("[data-newpw]").forEach(b=>b.onclick=async()=>{
@@ -1163,12 +1368,27 @@ function profPanel(){
       });
     }catch(e){box.innerHTML="";toast(e.message)}
   };
+  m.querySelector("#tObs").onclick=async()=>{
+    prof.api=m.querySelector("#apiIn").value.trim();store.set(K_PROF,prof);refreshOnlineUI();
+    teacherPw=m.querySelector("#tPw").value;
+    const box=m.querySelector("#tGroups");box.innerHTML=`<p class="muted">Chargement…</p>`;
+    try{
+      const list=(await api("teacherObservations",{teacher:teacherPw})).observations.sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+      box.innerHTML=list.length?`<div class="gList"><table class="tObs"><thead><tr><th>Date</th><th>Classe</th><th>Observateurs</th><th>Groupe observé</th><th>✓</th><th>⚠</th><th></th></tr></thead><tbody>
+        ${list.map(o=>`<tr><td>${o.date?fmtDate(o.date):""}</td><td>${esc(o.classe)}</td><td><b>${esc(o.observateurs)}</b><br><small class="muted">${esc(o.observateur)}</small></td><td><b>${esc(o.observe)}</b></td>
+          <td>${o.reussis}/${o.total}</td><td class="${o.securite?"badS":""}" title="${esc(o.detailSecurite)}">${o.securite}</td><td><button class="btn small alt" data-oid="${esc(o.id)}">Voir</button></td></tr>`).join("")}</tbody></table></div>`
+        :`<p class="muted">Aucune observation enregistrée.</p>`;
+      box.querySelectorAll("[data-oid]").forEach(b=>b.onclick=async()=>{try{viewObs((await api("teacherObservation",{teacher:teacherPw,id:b.dataset.oid})).data)}catch(e){toast(e.message)}});
+    }catch(e){box.innerHTML="";toast(e.message)}
+  };
   m.querySelector("#cacheVids").onclick=()=>cacheAllVideos(m.querySelector("#cacheMsg"));
   m.querySelector("#profSave").onclick=()=>{
     prof.api=m.querySelector("#apiIn").value.trim();refreshOnlineUI();
     prof.n=n;
+    prof.classes=m.querySelector("#classIn").value.split(",").map(x=>x.trim()).filter(Boolean);
     const np=m.querySelector("#newPin").value.trim(); if(np) prof.pin=np;
     store.set(K_PROF,prof); closeModal(); toast("Réglages enregistrés");
+    renderClassPick(); if(homeClass&&!G) loadGroupList();
     if(G){ensureSlots();showTab(curTab)}
   };
 }
@@ -1191,7 +1411,9 @@ if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude\.ai|clau
   navigator.serviceWorker.register("sw.js").catch(()=>{});
 }
 refreshOnlineUI();
-renderMembers();renderSaved();
+renderMembers();renderClassPick();
+(()=>{let c=null;try{c=sessionStorage.getItem(K_CLASS)}catch(e){} if(c&&classes().includes(c)) selectClass(c)})();
+flushAll();
 </script>
 </body>
 </html>
