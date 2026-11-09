@@ -1,0 +1,10 @@
+# Acrosport EPS — notes pour Claude
+
+Application web (PWA) d'acrosport pour tablettes, hébergée sur GitHub Pages depuis la branche `main` (racine).
+
+- `index.html` : toute l'appli dans un seul fichier (HTML + CSS + JS). Les données des 176 figures (`const FIGS`) et les photos (`const IMGS`, images WebP en data URI) sont des lignes JSON très longues : modifier le code autour, pas ces lignes à la main.
+- `v/` : vidéos d'origine du PowerPoint « AcroEPS niveau intermédiaire » (M. Avisse & Y. Tomaszower, Académie de Créteil). Ne pas recompresser.
+- `sw.js` : service worker (réseau d'abord pour la page → mises à jour automatiques ; vidéos servies depuis le cache `acro-videos-v1` si téléchargées). Changer `CORE` (acro-core-vN) si on ajoute des fichiers à `CORE_FILES`.
+- `apps-script/Code.gs` : serveur Google Apps Script (Google Sheet) pour la sauvegarde en ligne. L'URL /exec se règle dans `API_DEFAULT` de `index.html` ou dans l'espace enseignant.
+- Interface et textes en français ; utilisateurs : lycéens (classes TMELEC, TTBMA) et leur enseignant d'EPS.
+- Code enseignant local par défaut : `eps`. Pour limiter le nombre de pyramides d'une leçon : lien `#pyramides-N`.
