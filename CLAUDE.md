@@ -13,3 +13,4 @@ Application web (PWA) d'acrosport pour tablettes, hébergée sur GitHub Pages de
 - Synchro : jeton de groupe (`token`, jamais le mot de passe en stockage local), numéro de version `rev` + fusion en cas de conflit (`mergeGroups`), envoi auto du brouillon (`autoDirty`, 40 s). Leçon du jour par classe : `teacherSetLesson` → colonne `pyramides` de l'onglet Classes ; `lessonN(classe)`.
 - Observation : critères `CRIT` (statique) / `CRIT_DYN` (dynamique), clés de notes `f{figure}p{pyramide}|rôle|critère` (anciennes clés `f{i}|…` encore lues).
 - `const BONUS` (échauffement + vidéos `v/media1..17.mp4`, éléments gymniques A–D, prises de mains) est généré au build comme `FIGS`.
+- Bouton « Accueil » commun : `<script src="/eps-home.js" defer>` (fichier du dépôt `chrisdcqns-cmd.github.io`, page d'accueil `/` qui regroupe Acrosport, Escalade, OrienRun et Relais Vitesse dans un seul APK).
