@@ -50,6 +50,7 @@ L'icône Acrosport apparaît comme une vraie appli, en plein écran.
 - **Accueil** : l'élève touche sa **classe**, choisit son **groupe** dans la liste (ou le crée avec « + Créer un nouveau groupe » : nom, mot de passe, prénoms), tape le **mot de passe** et entre. Les groupes de la classe sont affichés en bas de l'accueil.
 - **Enregistrer ma progression** envoie tout en ligne. Si la tablette n'a pas de réseau, c'est gardé et **envoyé automatiquement** dès que la connexion revient (le badge en haut indique « ⏳ Envoi dès connexion » puis « ☁ En ligne ✓ »).
 - **Observation** : le groupe choisit le **groupe observé** → son enchaînement enregistré (pyramides, rôles, transitions) s'affiche avec les critères en colonnes (Porteur / Voltigeur / Pareur, puis Collectif et Sécurité). On coche les observateurs, on note, puis **Enregistrer l'observation**.
+- **Ton mot de passe enseignant ouvre tous les groupes** : à l'accueil, choisis le groupe et tape ton mot de passe enseignant à la place du sien. Le groupe s'ouvre en mode enseignant (badge « Enseignant ») : tu peux tout modifier et enregistrer.
 - **Accès à l'espace enseignant (⚙)** : ton mot de passe enseignant (celui de la ligne 13 du script), vérifié en ligne. Sur une tablette où tu t'es déjà connecté, il marche aussi sans internet.
 - **Toi** : ⚙ → **En ligne** →
   - **Voir tous les groupes en ligne** : **Ouvrir** (tu peux tout modifier puis enregistrer), **✏️ Modifier** (nom, classe, élèves), **Mot de passe** (si un groupe l'a oublié) ou **🗑 Supprimer** ;

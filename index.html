@@ -791,7 +791,26 @@ document.getElementById("enterBtn").onclick=async e=>{
     g.online={classe:homeClass,nom:it.nom};
     await enterGroup(g,pw);
   }catch(err){
-    if(err.network){ if(!(await openLocal("Hors connexion : tout sera envoyé en ligne au retour du réseau"))) toast("Pas de connexion, et ce groupe n'a jamais été ouvert sur cette tablette") }
+    // le mot de passe enseignant ouvre aussi tous les groupes
+    if(!err.network&&/Mot de passe/.test(err.message)){
+      try{
+        await api("teacherCheck",{teacher:pw});
+        teacherPw=pw; store.set(K_TPH,await sha("prof|"+pw));
+        const key=norm(homeClass)+"|"+norm(it.nom);
+        const r=await api("teacherLoad",{teacher:pw,key});
+        const g=normGroup(r.data,{classe:homeClass,nom:it.nom}); g.rev=Number(r.data&&r.data.rev)||0;
+        const loc=groups[g.id]; if(loc){g.obsDraft=loc.obsDraft;g.obsLog=loc.obsLog;g.token=loc.token;g.pwh=loc.pwh}
+        g.online={classe:homeClass,nom:it.nom,teacherKey:key};
+        G=g;persist();document.getElementById("gPwIn").value="";openApp();
+        toast("Groupe ouvert avec le mot de passe enseignant");
+        return;
+      }catch(e2){ if(e2.network){toast(e2.message);return} }
+    }
+    if(err.network){
+      const h=store.get(K_TPH,"");
+      if(local&&h&&h===await sha("prof|"+pw)){teacherPw=pw;G=local;document.getElementById("gPwIn").value="";openApp();toast("Hors connexion : groupe ouvert (enseignant)");return}
+      if(!(await openLocal("Hors connexion : tout sera envoyé en ligne au retour du réseau"))) toast("Pas de connexion, et ce groupe n'a jamais été ouvert sur cette tablette")
+    }
     else if(/introuvable/.test(err.message)&&local&&local.online&&local.online.pendingCreate){ if(!(await openLocal("Groupe pas encore envoyé en ligne : il le sera automatiquement"))) toast("Mot de passe incorrect") }
     else toast(err.message);
   }finally{btn.disabled=false;btn.textContent="Entrer →"}
