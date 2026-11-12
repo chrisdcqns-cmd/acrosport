@@ -18,7 +18,7 @@ const TAILLE_MORCEAU = 45000; // une cellule Google Sheets accepte 50 000 caract
 
 const T_GROUPES = { nom: 'Groupes', cols: ['cle', 'classe', 'nom', 'membres', 'empreinte', 'sel', 'mise_a_jour', 'nb_seances'] };
 const T_ELEVES = { nom: 'Eleves', cols: ['classe_eps', 'nom', 'prenom', 'classe'] };
-const T_CLASSES = { nom: 'Classes', cols: ['classe', 'code'] };
+const T_CLASSES = { nom: 'Classes', cols: ['classe', 'code', 'pyramides'] };
 const T_OBS = { nom: 'Observations', cols: ['id', 'date', 'classe', 'groupe_observateur', 'observateurs', 'groupe_observe', 'reussis', 'criteres_notes', 'erreurs_securite', 'detail_securite'] };
 
 function doGet() {
@@ -44,12 +44,12 @@ function traiter_(req) {
 
   // ---- classes : noms seulement (public) ----
   if (a === 'listClasses') {
-    const codes = {};
-    lignes_(T_CLASSES).forEach(r => codes[norm_(r.v[0])] = String(r.v[1] || ''));
+    const codes = {}, pyr = {};
+    lignes_(T_CLASSES).forEach(r => { codes[norm_(r.v[0])] = String(r.v[1] || ''); pyr[norm_(r.v[0])] = Number(r.v[2]) || 0; });
     const noms = {};
     lignes_(T_CLASSES).forEach(r => noms[norm_(r.v[0])] = r.v[0]);
     lignes_(T_ELEVES).forEach(r => { if (!noms[norm_(r.v[0])]) noms[norm_(r.v[0])] = r.v[0]; });
-    return { ok: true, classes: Object.keys(noms).map(k => ({ nom: noms[k], protege: !!codes[k] })) };
+    return { ok: true, classes: Object.keys(noms).map(k => ({ nom: noms[k], protege: !!codes[k], pyramides: pyr[k] || 0 })) };
   }
 
   // ---- liste des élèves d'une classe (code de classe si défini) ----
@@ -73,7 +73,7 @@ function traiter_(req) {
     if (!l) throw new Error('Groupe introuvable');
     const d = lireDonnees_(T_GROUPES, l.row) || {};
     const cur = d.current || {};
-    return { ok: true, routine: { nom: l.nom, classe: l.classe, members: d.members || [], slots: cur.slots || [], mats: (cur.mats || []).map(m => ({ text: m.text || '' })) } };
+    return { ok: true, routine: { nom: l.nom, classe: l.classe, members: d.members || [], slots: cur.slots || [], mats: (cur.mats || []).map(m => ({ text: m.text || '' })), dojo: cur.dojo || null, editedAt: d.editedAt || '' } };
   }
 
   if (a === 'create') {
@@ -83,8 +83,11 @@ function traiter_(req) {
       if (!req.password || String(req.password).length < 4) throw new Error('Mot de passe trop court (4 caractères minimum)');
       if (trouverGroupe_(cle)) throw new Error('Ce nom de groupe existe déjà dans cette classe');
       const sel = Utilities.getUuid();
-      ecrireGroupe_(null, cle, req.classe, req.nom, req.data, hash_(req.password, sel), sel);
-      return { ok: true };
+      const empreinte = hash_(req.password, sel);
+      const data = req.data || {};
+      data.rev = 1;
+      ecrireGroupe_(null, cle, req.classe, req.nom, data, empreinte, sel);
+      return { ok: true, rev: 1, token: jeton_(cle, empreinte) };
     });
   }
 
@@ -93,14 +96,10 @@ function traiter_(req) {
     const cle = cle_(req.classe, req.nom);
     const ligne = trouverGroupe_(cle);
     if (!ligne) throw new Error('Groupe introuvable');
-    if (!prof && hash_(req.password, ligne.sel) !== ligne.empreinte) throw new Error('Mot de passe incorrect');
-    if (a === 'load') return { ok: true, data: lireDonnees_(T_GROUPES, ligne.row) };
-    if (a === 'save') {
-      return verrou_(function () {
-        ecrireGroupe_(ligne.row, cle, ligne.classe, ligne.nom, req.data, ligne.empreinte, ligne.sel);
-        return { ok: true };
-      });
-    }
+    const parJeton = req.token && req.token === jeton_(ligne.cle, ligne.empreinte);
+    if (!prof && !parJeton && hash_(req.password, ligne.sel) !== ligne.empreinte) throw new Error('Mot de passe incorrect');
+    if (a === 'load') return { ok: true, data: lireDonnees_(T_GROUPES, ligne.row), token: jeton_(ligne.cle, ligne.empreinte) };
+    if (a === 'save') return verrou_(function () { return sauverAvecRevision_(ligne, req); });
     if (a === 'saveObservation') return verrou_(function () { ecrireObs_(req.obs, ligne); return { ok: true }; });
     if (a === 'myObservations') {
       const n = norm_(ligne.nom), c = norm_(ligne.classe);
@@ -135,6 +134,19 @@ function traiter_(req) {
       return { ok: true, count: nouveaux.length };
     });
   }
+  if (a === 'teacherSetLesson') {
+    return verrou_(function () {
+      const c = norm_(req.classe);
+      if (!c) throw new Error('Nom de classe manquant');
+      const n = Math.max(1, Math.min(12, Number(req.n) || 3));
+      const fc = feuille_(T_CLASSES);
+      fc.getRange(1, 3).setValue('pyramides');
+      const lc = lignes_(T_CLASSES).find(r => norm_(r.v[0]) === c);
+      if (lc) fc.getRange(lc.row, 3).setValue(n);
+      else fc.getRange(fc.getLastRow() + 1, 1, 1, 3).setValues([[String(req.classe).trim(), '', n]]);
+      return { ok: true, n: n };
+    });
+  }
   if (a === 'teacherObservations') {
     return { ok: true, observations: lignes_(T_OBS).map(r => resumeObs_(r.v)) };
   }
@@ -153,12 +165,7 @@ function traiter_(req) {
   const ligne = trouverGroupe_(req.key);
   if (!ligne) throw new Error('Groupe introuvable');
   if (a === 'teacherLoad') return { ok: true, data: lireDonnees_(T_GROUPES, ligne.row) };
-  if (a === 'teacherSave') {
-    return verrou_(function () {
-      ecrireGroupe_(ligne.row, ligne.cle, ligne.classe, ligne.nom, req.data, ligne.empreinte, ligne.sel);
-      return { ok: true };
-    });
-  }
+  if (a === 'teacherSave') return verrou_(function () { return sauverAvecRevision_(ligne, req); });
   if (a === 'teacherUpdateGroup') {
     return verrou_(function () {
       const classe = String(req.classe || ligne.classe).trim();
@@ -166,7 +173,7 @@ function traiter_(req) {
       const nouvelleCle = cle_(classe, nom);
       if (nouvelleCle !== ligne.cle && trouverGroupe_(nouvelleCle)) throw new Error('Ce nom de groupe existe déjà dans cette classe');
       const d = lireDonnees_(T_GROUPES, ligne.row) || {};
-      d.name = nom; d.classe = classe;
+      d.name = nom; d.classe = classe; d.rev = (Number(d.rev) || 0) + 1;
       if (Array.isArray(req.members) && req.members.length) d.members = req.members.map(String);
       ecrireGroupe_(ligne.row, nouvelleCle, classe, nom, d, ligne.empreinte, ligne.sel);
       return { ok: true, key: nouvelleCle };
@@ -199,6 +206,32 @@ function ecrireObs_(obs, ligneGroupe) {
 }
 function resumeObs_(v) {
   return { id: v[0], date: v[1], classe: v[2], observateur: v[3], observateurs: v[4], observe: v[5], reussis: v[6], total: v[7], securite: v[8], detailSecurite: v[9] };
+}
+
+// ---------- enregistrement sans écrasement ----------
+// Chaque enregistrement porte le numéro de version (rev) sur lequel la tablette s'appuie.
+// Si une autre tablette a enregistré entre-temps, on renvoie la version en ligne : l'appli fusionne puis renvoie.
+function sauverAvecRevision_(ligne, req) {
+  const actuel = lireDonnees_(T_GROUPES, ligne.row) || {};
+  const revActuelle = Number(actuel.rev) || 0;
+  if (req.baseRev !== undefined && req.baseRev !== null && Number(req.baseRev) !== revActuelle) {
+    return { ok: false, conflict: true, error: 'Conflit de version', data: actuel };
+  }
+  const data = req.data || {};
+  data.rev = revActuelle + 1;
+  ecrireGroupe_(ligne.row, ligne.cle, ligne.classe, ligne.nom, data, ligne.empreinte, ligne.sel);
+  return { ok: true, rev: data.rev };
+}
+
+// ---------- jeton de groupe (évite de garder le mot de passe sur la tablette) ----------
+function secret_() {
+  const p = PropertiesService.getScriptProperties();
+  let s = p.getProperty('SECRET');
+  if (!s) { s = Utilities.getUuid() + Utilities.getUuid(); p.setProperty('SECRET', s); }
+  return s;
+}
+function jeton_(cle, empreinte) {
+  return hash_(cle + '|' + empreinte, secret_());
 }
 
 // ---------- code de classe ----------

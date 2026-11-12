@@ -56,6 +56,13 @@ L'icône Acrosport apparaît comme une vraie appli, en plein écran.
   - **Voir les observations** : tableau *qui a observé qui*, date, critères réussis, nombre d'erreurs de sécurité, détail complet avec **Voir**.
 - La Google Sheet contient deux onglets : **Groupes** et **Observations** (qui a observé qui, quand, résultat, erreurs de sécurité nommées). Les mots de passe n'y sont jamais en clair.
 - Seuls les prénoms des élèves sont enregistrés, dans ton propre Google Drive.
+- **Leçon du jour** : ⚙ → **Leçon du jour** → classe + nombre de figures → **Appliquer à toutes les tablettes**. Le réglage est enregistré en ligne (onglet **Classes**, colonne `pyramides`) et arrive sur les tablettes des élèves en quelques instants.
+- **Figures simultanées** : dans une figure, « + Ajouter une pyramide en même temps » permet par exemple à un groupe de 5 de faire un duo + un trio : cela compte pour **une seule figure**.
+- **Liaisons** : elles se posent uniquement sur le **tapis** (étiquettes par élève, dont les éléments gymniques A–D du code UNSS). Les observateurs voient le tapis et la liste des liaisons de chaque élève.
+- **Enregistrement automatique** : l'enchaînement en cours est envoyé en ligne automatiquement (toutes les 40 s environ quand il change), pour que les observateurs voient la dernière version. « Enregistrer ma progression » ajoute en plus la séance à l'historique.
+- **Deux tablettes, même groupe** : si deux tablettes enregistrent en même temps, les séances des deux sont gardées et l'enchaînement le plus récent l'emporte (plus d'écrasement).
+- **Mot de passe** : la tablette ne garde jamais le mot de passe du groupe, seulement un jeton de connexion. Changer le mot de passe d'un groupe (⚙) déconnecte les tablettes de ce groupe.
+- **Bonus** : échauffement (17 exercices en vidéo), éléments gymniques A–D, légende des prises de mains.
 - **Classes et listes d'élèves** : ⚙ → **Listes d'élèves** → nom de la classe (ex. `1GT`), code de classe facultatif, fichier CSV (export Pronote « NOM Prénom;Classe ») → **Envoyer la liste en ligne**. Le nom en MAJUSCULES est séparé du prénom ; la liste va dans l'onglet **Eleves** de ta Google Sheet (jamais dans le site public). La classe apparaît alors sur l'accueil et, à la création d'un groupe, les élèves touchent leurs noms au lieu de les taper.
 - **Code de classe** : si tu en mets un, les élèves le tapent une fois par tablette pour voir les noms et les groupes de leur classe (l'onglet **Classes** de la Sheet le contient ; tu peux le changer là).
 
