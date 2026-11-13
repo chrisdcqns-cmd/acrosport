@@ -452,6 +452,8 @@ let groups=store.get(K_GROUPS,{});
 let G=null;               // groupe courant
 /* ---------- en ligne ---------- */
 const API_DEFAULT="https://script.google.com/macros/s/AKfycbzCW8b2vq-REokxUCdkbKyHf_nHJf4khfcCueu1AKKGlJVAiiSsiB7I-beOmjsUpE25Qg/exec";      // URL du script Google (…/exec) : peut aussi être collée dans l'espace enseignant
+/* dispenses communes (page d'accueil EPS, eps-home.js) */
+function dzA(c,n,p){try{const d=window.EPSD&&EPSD.find(c||"",n,p);return d?` <small style="display:block;color:#C0392B;font-weight:700">🩹 ${esc(EPSD.label(d))}</small>`:""}catch(e){return ""}}
 const K_PENDING="acro.pending.v1", K_OUTBOX="acro.outbox.v1", K_CACHE="acro.cache.v1";
 const PW={};               // mots de passe de la session en cours
 let teacherPw="";
@@ -736,7 +738,7 @@ function renderPicker(){
   const sel=draftMembers.filter(Boolean);
   box.innerHTML=`<div class="pickSel">${sel.length?sel.map((m,i)=>`<span class="pchip on">${esc(m)}<button data-un="${i}" aria-label="Retirer">×</button></span>`).join(""):`<span class="muted">Touche les élèves du groupe (2 à 6) :</span>`}</div>
     <div class="roster">${homeStudents.map(e=>{const d=displayName(e),on=sel.includes(d),t=taken[norm(d)];
-      return `<button class="rchip ${on?"on":""} ${t?"taken":""}" data-st="${esc(d)}"><b>${esc(e.prenom)}</b> ${esc(e.nom)}<small>${esc(e.classe)}${t?" · déjà dans "+esc(t):""}</small></button>`}).join("")}
+      return `<button class="rchip ${on?"on":""} ${t?"taken":""}" data-st="${esc(d)}"><b>${esc(e.prenom)}</b> ${esc(e.nom)}<small>${esc(e.classe)}${t?" · déjà dans "+esc(t):""}</small>${dzA(e.classe,e.nom,e.prenom)}</button>`}).join("")}
       <button class="rchip other" data-other>+ Autre élève</button></div>`;
   box.querySelectorAll("[data-st]").forEach(b=>b.onclick=()=>{
     const d=b.dataset.st,i=draftMembers.indexOf(d);
@@ -850,7 +852,7 @@ function openApp(){
   document.getElementById("home").classList.add("hidden");
   document.getElementById("app").classList.remove("hidden");
   document.getElementById("memberChips").innerHTML=
-    `<span class="chip" style="background:var(--sun);color:var(--ink)">${esc(G.classe)}</span>`+G.members.map(m=>`<span class="chip">${esc(m)}</span>`).join("");
+    `<span class="chip" style="background:var(--sun);color:var(--ink)">${esc(G.classe)}</span>`+G.members.map(m=>`<span class="chip">${esc(m)}${dzA(G.classe,m)?" 🩹":""}</span>`).join("")+(G.members.filter(m=>dzA(G.classe,m)).length?`<div class="dzline" style="width:100%;margin-top:6px;padding:6px 10px;border-radius:10px;background:#FDF0EE;color:#9C2B10;font-weight:700;font-size:14px">🩹 ${G.members.filter(m=>dzA(G.classe,m)).map(m=>esc(m)+" "+esc(EPSD.label(EPSD.find(G.classe,m)))).join(" · ")}</div>`:"");
   const n=G.members.length;
   vFilter={f:n===2?"duo":n===3?"trio":n===4?"quatuor":null,t:null,lv:null};
   ensureSlots();
@@ -1110,7 +1112,7 @@ function renderRoutine(){
     <div class="tray" id="tray"></div>
     <div class="dojoTools">
       <span class="muted" style="font-weight:700">Élève :</span>
-      ${G.members.map((mm,k)=>`<button class="who ${k===0?"on":""}" data-who="${k}" style="--c:${MEMBER_COLORS[k%MEMBER_COLORS.length]}">${esc(mm)}</button>`).join("")}
+      ${G.members.map((mm,k)=>`<button class="who ${k===0?"on":""}" data-who="${k}" style="--c:${MEMBER_COLORS[k%MEMBER_COLORS.length]}">${esc(mm)}${dzA(G.classe,mm)?" 🩹":""}</button>`).join("")}
       <button class="who" data-who="-1" style="--c:#14213d">Tout le groupe</button>
     </div>
     <div class="dojoTools">
@@ -1822,7 +1824,7 @@ async function editGroup(g,onDone){
     const f=norm(filter);
     box.innerHTML=`<div class="pickSel">${members.length?members.map((x,i)=>`<span class="pchip on">${esc(x)}<button data-un="${i}" aria-label="Retirer">×</button></span>`).join(""):`<span class="muted">Aucun élève.</span>`}</div>
       ${roster.length?`<input class="inp" id="eFilter" placeholder="Rechercher un élève…" value="${esc(filter)}" style="margin-bottom:6px">`:""}
-      <div class="roster">${roster.filter(e=>!f||norm(displayName(e)).includes(f)).map(e=>{const d=displayName(e);return `<button class="rchip ${members.includes(d)?"on":""}" data-st="${esc(d)}"><b>${esc(e.prenom)}</b> ${esc(e.nom)}<small>${esc(e.classe)}</small></button>`}).join("")}
+      <div class="roster">${roster.filter(e=>!f||norm(displayName(e)).includes(f)).map(e=>{const d=displayName(e);return `<button class="rchip ${members.includes(d)?"on":""}" data-st="${esc(d)}"><b>${esc(e.prenom)}</b> ${esc(e.nom)}${dzA(e.classe,e.nom,e.prenom)}<small>${esc(e.classe)}</small></button>`}).join("")}
       <button class="rchip other" data-other>+ Autre élève</button></div>`;
     box.querySelectorAll("[data-un]").forEach(b=>b.onclick=()=>{members.splice(+b.dataset.un,1);draw()});
     box.querySelectorAll("[data-st]").forEach(b=>b.onclick=()=>{const d=b.dataset.st,i=members.indexOf(d);if(i>=0)members.splice(i,1);else members.push(d);draw()});
